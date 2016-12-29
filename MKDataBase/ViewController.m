@@ -12,6 +12,7 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) MKDataBaseManager *dataManager;
+@property (nonatomic, assign) CFAbsoluteTime beginTime;
 
 @end
 
@@ -22,9 +23,14 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     _dataManager = [MKDataBaseManager sharedDatabaseManager];
-    [self insertSomeObjecs];
+    //[self insertSomeObjecs];
     //[self queryWithCondition];
     //[self unpdateWithCondition];
+    [self queryWithCondition2];
+    
+    _beginTime = CFAbsoluteTimeGetCurrent();
+    
+    
     
 }
 
@@ -49,17 +55,52 @@
 
 - (void)queryWithCondition{
     
-    MKRange *range = [[MKRange alloc]init];
-    range.name = @"age";
-    range.start = 10;
-    range.end = 80;
-    
-    NSDictionary *condition = @{@"degree":@"4"};
-    NSArray *conditionResult = [_dataManager findObjectsWithRange:range condition:condition objName:@"MKEmployee"];
-    NSLog(@"find result:%@",conditionResult);
-    
+    for (int i = 0 ; i < 1000; i ++) {
+        
+        MKRange *range = [[MKRange alloc]init];
+        range.name = @"age";
+        range.start = 10;
+        range.end = 80;
+        
+        NSDictionary *condition = @{@"degree":@"4"};
+        NSArray *conditionResult = [_dataManager findObjectsWithRange:range condition:condition objName:@"MKEmployee"];
+        NSLog(@"find result:%@",conditionResult);
+        if (i == 999) {
+            
+            CFAbsoluteTime current = CFAbsoluteTimeGetCurrent();
+            NSLog(@"consume time = %f",(current - _beginTime) * 1000);
+            
+        }
+        
+    }
+  
 }
 
+- (void)queryWithCondition2{
+    
+    for (int i = 0 ; i < 1000; i ++) {
+        
+        MKRange *range = [[MKRange alloc]init];
+        range.name = @"age";
+        range.start = 10;
+        range.end = 80;
+        
+        NSDictionary *condition = @{@"degree":@"4"};
+        [_dataManager findObjectsWithRange:range condition:condition objName:@"MKEmployee" callBackBlock:^(NSArray *foundObjcs) {
+            
+        }];
+        
+        if (i == 999) {
+            
+            CFAbsoluteTime current = CFAbsoluteTimeGetCurrent();
+            NSLog(@"consume time = %f",(current - _beginTime) * 1000);
+            
+            
+        }
+        
+    }
+
+}
 - (void)unpdateWithCondition{
     
     MKEmployee *employee = [[MKEmployee alloc]init];

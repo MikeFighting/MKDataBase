@@ -15,6 +15,7 @@
 
 {
     FMDatabase *_database;
+    dispatch_queue_t _mkqueue;
 }
 
 @property (nonatomic, strong, readwrite) MKSQLQuery *query;
@@ -276,6 +277,7 @@ static MKDataBaseManager *manager = nil;
 };
 
 
+    
 - (NSArray *)p_getObjcsWithResutltSet:(FMResultSet *)resultSet className:(NSString *)className {
 
     
