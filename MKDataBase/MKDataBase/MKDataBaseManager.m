@@ -16,6 +16,9 @@
 {
     FMDatabase *_database;
     dispatch_queue_t _mkqueue;
+    NSLock *_lock;
+    
+    
 }
 
 @property (nonatomic, strong, readwrite) MKSQLQuery *query;
@@ -32,6 +35,9 @@ static MKDataBaseManager *manager = nil;
     {
         _database = [FMDatabase databaseWithPath:[self p_databasePath]];
         _query = [[MKSQLQuery alloc]init];
+        _mkqueue = dispatch_queue_create("com.mike.mkdatabase.queue", DISPATCH_QUEUE_CONCURRENT);
+        _lock = [[NSLock alloc]init];
+        
 
     }
     return self;
@@ -51,23 +57,35 @@ static MKDataBaseManager *manager = nil;
 
  @return If the operation is success
  */
+
 - (BOOL)p_executeUpdateSQL:(NSString *)sql{
     
+    [_lock lock];
     if (![_database open]) return NO;
     NSAssert(sql.length > 1, @"the sql language can not be empty");
     BOOL isExecuteSuccess = [_database executeUpdate:sql];
     [_query resetSql];
     [_database close];
+    [_lock unlock];
     return isExecuteSuccess;
 }
 
+/**
+ This method will be executed finally.
+ 
+ @param sql sql language
+ 
+ @return If the operation is success
+ */
 - (FMResultSet *)p_executeQuerySQL:(NSString *)sql{
-
+    
     if (![_database open]) return nil;
     NSAssert(sql.length > 1, @"the sql language can not be empty");
     FMResultSet *resultSet = [_database executeQuery:sql];
     [_query resetSql];
+    
     return resultSet;
+    
 }
 
 /**
@@ -87,15 +105,19 @@ static MKDataBaseManager *manager = nil;
  */
 - (BOOL)isTableExistsWithName:(NSString *)tableName
 {
-
+    [_lock lock];
     NSString *sql = _query.exist(tableName).sql;
     FMResultSet *results = [self p_executeQuerySQL:sql];
     
     if (results.next)
     {
         [_database close];
+        [_lock unlock];
         return YES;
     }
+    [_database close];
+    [_lock unlock];
+    
     return NO;
 }
 
@@ -236,30 +258,60 @@ static MKDataBaseManager *manager = nil;
  */
 - (NSArray *)findObjectsWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
 
-
+    [_lock lock];
     NSString *sqlLanguage = _query.selectM(objcName).condition(condition).sql;
     FMResultSet *results = [self p_executeQuerySQL:sqlLanguage];
     NSArray *reultModels = [self p_getObjcsWithResutltSet:results className:objcName];
     [_database close];
-    
+    [_lock unlock];
     return reultModels;
     
 
 }
 
+- (void)findObjectsInBackGroundWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
+    
+    if (!callBackBlock) return;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_mkqueue, ^{
+    
+        __strong typeof(weakSelf) self = weakSelf;
+        NSArray *foundObjs = [self findObjectsWithCondition:condition objName:objcName];
+        callBackBlock(foundObjs);
+    });
+    
+    
+}
+
 - (NSArray *)findObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName{
 
+    [_lock lock];
     NSString *sqlLanguage = _query.selectM(objcName).range(MKRangeTypeDefault,range).condition(conditionDic).sql;
     FMResultSet *results = [self p_executeQuerySQL:sqlLanguage];
     NSArray *resultModels = [self p_getObjcsWithResutltSet:results className:objcName];
     [_database close];
+    [_lock unlock];
     return resultModels;
     
+}
+
+- (void)findObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
+
+    if (!callBackBlock) return;
+    __weak typeof(self) weakSelf = self;
+    
+    dispatch_async(_mkqueue, ^{
+        
+        __strong typeof(weakSelf) self = weakSelf;
+        NSArray *foundObjs = [self findObjectsWithRange:range condition:conditionDic objName:objcName];
+        callBackBlock(foundObjs);
+    });
 }
 
 #warning The selection type MKRangeType should be open to user, how can I do it ?
 - (NSArray *)findObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName {
     
+    [_lock lock];
     _query.selectM(objcName);
     for (MKRange *temptRagne in ranges) {
         
@@ -271,13 +323,27 @@ static MKDataBaseManager *manager = nil;
     FMResultSet *results = [self p_executeQuerySQL:sqlLanguage];
     NSArray *resultModels = [self p_getObjcsWithResutltSet:results className:objcName];
     [_database close];
-    
+    [_lock unlock];
     return resultModels;
 
 };
 
 
+- (void)findObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
+
+    if (!callBackBlock) return;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_mkqueue, ^{
+        
+        __strong typeof(weakSelf) self = weakSelf;
+        NSArray *foundObjcs = [self findObjectsWithRanges:ranges condition:conditionDic objName:objcName];
+        callBackBlock(foundObjcs);
+        
+    });
     
+
+}
+
 - (NSArray *)p_getObjcsWithResutltSet:(FMResultSet *)resultSet className:(NSString *)className {
 
     
@@ -297,7 +363,7 @@ static MKDataBaseManager *manager = nil;
             NSString *valueString = [resultSet stringForColumn:attributes[i]];
             if (valueString.length == 0) valueString = @"";
             // set the value
-            [obj setValue:[resultSet stringForColumn:attributes[i]] forKey:attributes[i]];
+            [obj setValue:valueString forKey:attributes[i]];
         }
         // add to the datasource
         [resultModels addObject:obj];
@@ -307,33 +373,61 @@ static MKDataBaseManager *manager = nil;
 
 }
 
+- (void)findObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock{
+
+    if (!callBackBlock) return;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_mkqueue, ^{
+
+        __strong typeof(weakSelf) self = weakSelf;
+        NSArray *foundObjcs = [self findObjectsWithName:className];
+        callBackBlock(foundObjcs);
+        
+        
+    });
+   
+}
+
 /**
  query all the data modle, and get them from the retured array
  */
 - (NSArray *)findObjectsWithName:(NSString *)className
 {
-    
+    [_lock lock];
     if (![_database open]) return nil;
     NSString *sql = _query.selectM(className).sql;
     FMResultSet *results = [self p_executeQuerySQL:sql];
     NSArray *reultModels =  [self p_getObjcsWithResutltSet:results className:className];
     [_database close];
-    
+    [_lock unlock];
     return reultModels;
     
 }
+
 
 /**
  query the object which satisfy the conditioan
  */
 - (id)findObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
 
-    
     NSArray *conditionResultArray =  [self findObjectsWithCondition:condition objName:objcName];
     return [conditionResultArray firstObject];
 
 }
 
+- (void)findObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
+    
+    if (!callBackBlock) return;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(_mkqueue, ^{
+       
+        __strong typeof(weakSelf) self = weakSelf;
+        id objc = [self findObjectWithCondition:condition objName:objcName];
+        callBackBlock(objc);
+        
+    });
+    
+}
 
 @end
 

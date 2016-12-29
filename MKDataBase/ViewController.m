@@ -12,7 +12,7 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) MKDataBaseManager *dataManager;
-@property (nonatomic, assign) CFAbsoluteTime beginTime;
+@property (nonatomic, assign) double beginTime;
 
 @end
 
@@ -92,8 +92,8 @@
         
         if (i == 999) {
             
-            CFAbsoluteTime current = CFAbsoluteTimeGetCurrent();
-            NSLog(@"consume time = %f",(current - _beginTime) * 1000);
+            double current = CFAbsoluteTimeGetCurrent();
+            NSLog(@"consume time = %f",(current - _beginTime) * 1000.0f);
             
             
         }
