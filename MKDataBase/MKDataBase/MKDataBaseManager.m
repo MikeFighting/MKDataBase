@@ -38,7 +38,6 @@ static MKDataBaseManager *manager = nil;
         _mkqueue = dispatch_queue_create("com.mike.mkdatabase.queue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc]init];
         
-
     }
     return self;
 }
@@ -256,7 +255,7 @@ static MKDataBaseManager *manager = nil;
 /**
  query all the objects, which satisfy the conditions
  */
-- (NSArray *)findObjectsWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
+- (NSArray *)queryObjectsWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
 
     [_lock lock];
     NSString *sqlLanguage = _query.selectM(objcName).condition(condition).sql;
@@ -269,21 +268,21 @@ static MKDataBaseManager *manager = nil;
 
 }
 
-- (void)findObjectsInBackGroundWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
+- (void)queryObjectsInBackGroundWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
     
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(_mkqueue, ^{
     
         __strong typeof(weakSelf) self = weakSelf;
-        NSArray *foundObjs = [self findObjectsWithCondition:condition objName:objcName];
+        NSArray *foundObjs = [self queryObjectsWithCondition:condition objName:objcName];
         callBackBlock(foundObjs);
     });
     
     
 }
 
-- (NSArray *)findObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName{
+- (NSArray *)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName{
 
     [_lock lock];
     NSString *sqlLanguage = _query.selectM(objcName).range(MKRangeTypeDefault,range).condition(conditionDic).sql;
@@ -295,7 +294,7 @@ static MKDataBaseManager *manager = nil;
     
 }
 
-- (void)findObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
+- (void)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
 
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
@@ -303,13 +302,13 @@ static MKDataBaseManager *manager = nil;
     dispatch_async(_mkqueue, ^{
         
         __strong typeof(weakSelf) self = weakSelf;
-        NSArray *foundObjs = [self findObjectsWithRange:range condition:conditionDic objName:objcName];
+        NSArray *foundObjs = [self queryObjectsWithRange:range condition:conditionDic objName:objcName];
         callBackBlock(foundObjs);
     });
 }
 
 #warning The selection type MKRangeType should be open to user, how can I do it ?
-- (NSArray *)findObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName {
+- (NSArray *)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName {
     
     [_lock lock];
     _query.selectM(objcName);
@@ -329,14 +328,14 @@ static MKDataBaseManager *manager = nil;
 };
 
 
-- (void)findObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
+- (void)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
 
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(_mkqueue, ^{
         
         __strong typeof(weakSelf) self = weakSelf;
-        NSArray *foundObjcs = [self findObjectsWithRanges:ranges condition:conditionDic objName:objcName];
+        NSArray *foundObjcs = [self queryObjectsWithRanges:ranges condition:conditionDic objName:objcName];
         callBackBlock(foundObjcs);
         
     });
@@ -373,14 +372,14 @@ static MKDataBaseManager *manager = nil;
 
 }
 
-- (void)findObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock{
+- (void)queryObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock{
 
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(_mkqueue, ^{
 
         __strong typeof(weakSelf) self = weakSelf;
-        NSArray *foundObjcs = [self findObjectsWithName:className];
+        NSArray *foundObjcs = [self queryObjectsWithName:className];
         callBackBlock(foundObjcs);
         
         
@@ -391,7 +390,7 @@ static MKDataBaseManager *manager = nil;
 /**
  query all the data modle, and get them from the retured array
  */
-- (NSArray *)findObjectsWithName:(NSString *)className
+- (NSArray *)queryObjectsWithName:(NSString *)className
 {
     [_lock lock];
     if (![_database open]) return nil;
@@ -408,21 +407,21 @@ static MKDataBaseManager *manager = nil;
 /**
  query the object which satisfy the conditioan
  */
-- (id)findObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
+- (id)queryObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
 
-    NSArray *conditionResultArray =  [self findObjectsWithCondition:condition objName:objcName];
+    NSArray *conditionResultArray =  [self queryObjectsWithCondition:condition objName:objcName];
     return [conditionResultArray firstObject];
 
 }
 
-- (void)findObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
+- (void)queryObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
     
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
     dispatch_async(_mkqueue, ^{
        
         __strong typeof(weakSelf) self = weakSelf;
-        id objc = [self findObjectWithCondition:condition objName:objcName];
+        id objc = [self queryObjectWithCondition:condition objName:objcName];
         callBackBlock(objc);
         
     });

@@ -54,9 +54,9 @@
  *
  *  @return the object's array
  */
-- (NSArray *)findObjectsWithName:(NSString *)className;
+- (NSArray *)queryObjectsWithName:(NSString *)className;
 
-- (void)findObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock;
+- (void)queryObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock;
 
 
 /**
@@ -67,9 +67,9 @@
  *
  *  @return the arrary contains all the objects
  */
-- (NSArray *)findObjectsWithCondition:(NSDictionary *)condition objName:(NSString *)objcName;
+- (NSArray *)queryObjectsWithCondition:(NSDictionary *)condition objName:(NSString *)objcName;
 
-- (void)findObjectsInBackGroundWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock;
+- (void)queryObjectsInBackGroundWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock;
 /**
  *
  *  @param className the tableName
@@ -79,10 +79,10 @@
  *
  *  @return the objects array
  */
-- (NSArray *)findObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
+- (NSArray *)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
 
 
-- (void)findObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
+- (void)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
 
 /**
  *  @param className the tableName
@@ -95,9 +95,9 @@
  *
  */
 
-- (NSArray *)findObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
+- (NSArray *)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
 
-- (void)findObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
+- (void)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
 
 /**
  *  query one object frome the database
@@ -108,9 +108,9 @@
  *  @return the object which satisfy the condition
  */
 
-- (id)findObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName;
+- (id)queryObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName;
 
-- (void)findObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock;
+- (void)queryObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock;
 
 @end
 

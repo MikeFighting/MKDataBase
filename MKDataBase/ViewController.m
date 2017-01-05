@@ -63,7 +63,7 @@
         range.end = 80;
         
         NSDictionary *condition = @{@"degree":@"4"};
-        NSArray *conditionResult = [_dataManager findObjectsWithRange:range condition:condition objName:@"MKEmployee"];
+        NSArray *conditionResult = [_dataManager queryObjectsWithRange:range condition:condition objName:@"MKEmployee"];
         NSLog(@"find result:%@",conditionResult);
         if (i == 999) {
             
@@ -86,7 +86,7 @@
         range.end = 80;
         
         NSDictionary *condition = @{@"degree":@"4"};
-        [_dataManager findObjectsWithRange:range condition:condition objName:@"MKEmployee" callBackBlock:^(NSArray *foundObjcs) {
+        [_dataManager queryObjectsWithRange:range condition:condition objName:@"MKEmployee" callBackBlock:^(NSArray *foundObjcs) {
             
         }];
         

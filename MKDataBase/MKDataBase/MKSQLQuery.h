@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, MKRangeType){
 
 NS_ASSUME_NONNULL_END
 
-NS_ASSUME_NONNULL_BEGIN
+
 @class MKSQLQuery;
 
 typedef MKSQLQuery *(^Select)(NSArray <NSString *> *colums);
@@ -30,6 +30,8 @@ typedef MKSQLQuery *(^SelectM)(NSString *tableName);
 typedef MKSQLQuery *(^From)(NSString *tableName);
 typedef MKSQLQuery *(^InsertDic)(NSString *table, NSDictionary *keyValueDic);
 typedef MKSQLQuery *(^InsertObj)(id dataModel);
+typedef MKSQLQuery *(^ReplaceInsertDic)(NSString *table, NSDictionary *keyValueDic);
+typedef MKSQLQuery *(^RplaceInserObj)(id dataModel);
 typedef MKSQLQuery *(^Exist)(NSString *table);
 typedef MKSQLQuery *(^Condition)(NSDictionary *condition);
 typedef MKSQLQuery *(^Range)(MKRangeType type,MKRange *range);
@@ -38,6 +40,7 @@ typedef MKSQLQuery *(^Update) (NSString *tableName,NSDictionary *newKeyValue);
 typedef MKSQLQuery *(^UpdateObj)(id tableObjc);
 typedef MKSQLQuery *(^Delete)(NSString *tableName);
 
+NS_ASSUME_NONNULL_BEGIN
 @interface MKSQLQuery : NSObject
 
 @property (nonatomic, copy) NSArray *array;
@@ -73,9 +76,20 @@ typedef MKSQLQuery *(^Delete)(NSString *tableName);
 
 /**
  Insert into new data from objc.
- NSString *table, id dataModel
+ id dataModel
  */
 @property (nonatomic, copy) InsertObj insertObjc;
+
+/**
+ Replace insert new data from dictionary.
+ NSString *table, NSDictionary *keyValueDic
+ */
+@property (nonatomic, copy) ReplaceInsertDic replaceInsertDic;
+/**
+ Replce the object saved to database and isnert the new object
+ id dataModel
+ */
+@property (nonatomic, copy) RplaceInserObj replaceInsertObj;
 
 /**
  If the table exist.

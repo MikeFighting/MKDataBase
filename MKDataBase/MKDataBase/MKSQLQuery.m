@@ -61,6 +61,36 @@
 
 }
 
+- (RplaceInserObj)replaceInsertObj {
+
+    return ^(id dataModel){
+    
+        NSString *tableName = [self p_classNameFromObject:dataModel];
+        NSDictionary *dataModelDic = [self p_propertyDicWithObjc:dataModel];
+        return self.replaceInsertDic(tableName,dataModelDic);;
+    };
+
+    
+   
+}
+
+- (ReplaceInsertDic)replaceInsertDic {
+
+    return ^(NSString *table, NSDictionary *keyValueDic){
+    
+        NSArray *keys = [keyValueDic allKeys];
+        NSString *keysString = [NSString stringWithFormat:@"'%@'", [keys componentsJoinedByString:@"','"]];
+        
+        NSArray *values = [keyValueDic allValues];
+        // '1,2,3
+        NSString *valuesString = [NSString stringWithFormat:@"'%@'",[values componentsJoinedByString:@"','"]];
+        
+        _sql = [NSString stringWithFormat:@"REPLACE INTO %@  ( %@ ) VALUES ( %@ )",table, keysString, valuesString];
+    
+        return self;
+    };
+}
+
 - (InsertObj)insertObjc {
 
     return ^(id dataModel){
@@ -72,6 +102,7 @@
     };
 
 }
+
 
 - (InsertDic)insertDic {
 
