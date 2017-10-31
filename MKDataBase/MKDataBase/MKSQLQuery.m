@@ -131,48 +131,23 @@
         return self;
     };
 
-
 }
 
 - (Condition)condition {
 
     NSAssert(_sql.length, @"the condition can not exist alone");
-    return ^(NSDictionary *condition){
+    return ^(MKSql *condition){
     
-        NSString *coditionString  = [self p_coditionDicStringWithDic:condition];
-        NSString *selectType = [_sql rangeOfString:@"WHERE"].length ? @"AND" : @"WHERE";
-        _sql = [NSString stringWithFormat:@" %@ %@ %@",_sql ,selectType, coditionString];
-        
-        return self;
-    };
-
-}
-
-- (Range)range {
-
-    return ^(MKRangeType type,MKRange *range){
     
-        NSString *front = [self p_frontConditionIds][type];
-        NSString *trail = [self p_trailConditionIds][type];
-        NSString *start = [NSString stringWithFormat:@"'%ld'",range.start];
-        NSString *end = [NSString stringWithFormat:@"'%ld'",range.end];
+        NSString *selectType = [_sql rangeOfString:@"WHERE"].length ? @" " : @"WHERE";
+        _sql = [NSString stringWithFormat:@" %@ %@ %@",_sql ,selectType, condition.result];
         
-        NSString *selectType = [_sql rangeOfString:@"AND"].length ? @"AND" : @"";
-        NSString *rangeString = [NSString stringWithFormat:@"%@ %@ %@ %@ AND %@ %@ %@",selectType, range.name,front, start, range.name, trail, end];
-        if ([_sql rangeOfString:@"WHERE"].length) {
-            
-            _sql = [NSString stringWithFormat:@"%@ %@",_sql,rangeString];
-            return self;
-        }
-        
-        _sql = [NSString stringWithFormat:@"%@ WHERE %@",_sql, rangeString];
         return self;
     };
 
 }
 
 - (Creat)creat{
-
 
     return ^(id dataModel){
     

@@ -11,13 +11,11 @@
 #import "MKSQLQuery.h"
 #import <objc/runtime.h>
 
-@interface MKDataBaseManager ()
-
-{
+@interface MKDataBaseManager () {
+    
     FMDatabase *_database;
     dispatch_queue_t _mkqueue;
     NSLock *_lock;
-    
     
 }
 
@@ -450,13 +448,11 @@ static MKDataBaseManager *manager = nil;
  */
 - (BOOL)updateTableWithNewObjc:(id)tableObject condition:(NSDictionary *)condition{
 
-
     NSString *sqlLanguage = _query.updateObj(tableObject).condition(condition).sql;
     // assemble the sql language
     BOOL isUpdateSuccess = [self p_executeUpdateSQL:sqlLanguage];
     [_database close];
     return isUpdateSuccess;
-
 }
 
 @end

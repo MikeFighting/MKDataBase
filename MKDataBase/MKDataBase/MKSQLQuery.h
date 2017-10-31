@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MKRange.h"
-
+#import "MKSql.h"
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, MKRangeType){
@@ -25,20 +24,19 @@ NS_ASSUME_NONNULL_END
 
 @class MKSQLQuery;
 
-typedef MKSQLQuery *(^Select)(NSArray <NSString *> *colums);
-typedef MKSQLQuery *(^SelectM)(NSString *tableName);
-typedef MKSQLQuery *(^From)(NSString *tableName);
-typedef MKSQLQuery *(^InsertDic)(NSString *table, NSDictionary *keyValueDic);
-typedef MKSQLQuery *(^InsertObj)(id dataModel);
-typedef MKSQLQuery *(^ReplaceInsertDic)(NSString *table, NSDictionary *keyValueDic);
-typedef MKSQLQuery *(^RplaceInserObj)(id dataModel);
-typedef MKSQLQuery *(^Exist)(NSString *table);
-typedef MKSQLQuery *(^Condition)(NSDictionary *condition);
-typedef MKSQLQuery *(^Range)(MKRangeType type,MKRange *range);
-typedef MKSQLQuery *(^Creat) (id dataBaseModel);
-typedef MKSQLQuery *(^Update) (NSString *tableName,NSDictionary *newKeyValue);
-typedef MKSQLQuery *(^UpdateObj)(id tableObjc);
-typedef MKSQLQuery *(^Delete)(NSString *tableName);
+typedef MKSQLQuery *_Nonnull(^Select)(NSArray <NSString *> * _Nonnull colums);
+typedef MKSQLQuery *_Nonnull(^SelectM)(NSString * _Nullable tableName);
+typedef MKSQLQuery *_Nonnull(^From)(NSString * _Nonnull tableName);
+typedef MKSQLQuery *_Nonnull(^InsertDic)(NSString * _Nullable _Nonnulltable, NSDictionary * _Nonnull keyValueDic);
+typedef MKSQLQuery *_Nonnull(^InsertObj)(id _Nonnull dataModel);
+typedef MKSQLQuery *_Nonnull(^ReplaceInsertDic)(NSString * _Nullable table, NSDictionary * _Nonnull keyValueDic);
+typedef MKSQLQuery *_Nonnull(^RplaceInserObj)(id _Nonnull dataModel);
+typedef MKSQLQuery *_Nonnull(^Exist)(NSString * _Nonnull table);
+typedef MKSQLQuery *_Nonnull(^Condition)(MKSql * _Nonnull sqlCondition);
+typedef MKSQLQuery *_Nullable(^Creat) (id _Nonnull dataBaseModel);
+typedef MKSQLQuery *_Nonnull(^Update) (NSString * _Nonnull tableName,NSDictionary * _Nonnull newKeyValue);
+typedef MKSQLQuery *_Nonnull(^UpdateObj)(id _Nonnull tableObjc);
+typedef MKSQLQuery *_Nonnull(^Delete)(NSString * _Nonnull tableName);
 
 NS_ASSUME_NONNULL_BEGIN
 @interface MKSQLQuery : NSObject
@@ -102,12 +100,6 @@ NS_ASSUME_NONNULL_BEGIN
  Parameter: NSDictionary *condition
  */
 @property (nonatomic, copy) Condition condition;
-
-/**
- Set the range of for the query.
- Parameter: MKRangeType type,MKRange *range
- */
-@property (nonatomic, copy) Range range;
 
 /**
  Creat table by object.

@@ -25,6 +25,7 @@
 		273172A91E14E5D2007F3EF3 /* MKDataBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A41E14E5D1007F3EF3 /* MKDataBaseManager.m */; };
 		273172AA1E14E5D2007F3EF3 /* MKRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A61E14E5D1007F3EF3 /* MKRange.m */; };
 		273172AB1E14E5D2007F3EF3 /* MKSQLQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */; };
+		278E595D1FA8B88F0057E8A9 /* MKSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 278E595C1FA8B88F0057E8A9 /* MKSql.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,8 @@
 		273172A61E14E5D1007F3EF3 /* MKRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKRange.m; sourceTree = "<group>"; };
 		273172A71E14E5D1007F3EF3 /* MKSQLQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSQLQuery.h; sourceTree = "<group>"; };
 		273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSQLQuery.m; sourceTree = "<group>"; };
+		278E595B1FA8B88F0057E8A9 /* MKSql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSql.h; sourceTree = "<group>"; };
+		278E595C1FA8B88F0057E8A9 /* MKSql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSql.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +206,8 @@
 				273172A61E14E5D1007F3EF3 /* MKRange.m */,
 				273172A71E14E5D1007F3EF3 /* MKSQLQuery.h */,
 				273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */,
+				278E595B1FA8B88F0057E8A9 /* MKSql.h */,
+				278E595C1FA8B88F0057E8A9 /* MKSql.m */,
 			);
 			path = MKDataBase;
 			sourceTree = "<group>";
@@ -358,6 +363,7 @@
 				273172871E14E422007F3EF3 /* FMResultSet.m in Sources */,
 				273172411E14E3F7007F3EF3 /* main.m in Sources */,
 				273172AB1E14E5D2007F3EF3 /* MKSQLQuery.m in Sources */,
+				278E595D1FA8B88F0057E8A9 /* MKSql.m in Sources */,
 				2731729B1E14E48F007F3EF3 /* MKEmployee.m in Sources */,
 				273172841E14E422007F3EF3 /* FMDatabaseAdditions.m in Sources */,
 			);

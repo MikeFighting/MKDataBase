@@ -7,8 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
-
+#import "MKSql.h"
 @interface MKDataBaseTests : XCTestCase
+
+@property (nonatomic, strong) MKSql *sql;
 
 @end
 
@@ -17,6 +19,15 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+}
+
+- (void)testSql{
+
+    _sql = [[MKSql alloc]init];
+    
+    NSLog(@"-----%@",_sql.equ(@"12",@"12").result);
+    
 }
 
 - (void)tearDown {

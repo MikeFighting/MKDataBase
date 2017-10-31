@@ -21,17 +21,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     _dataManager = [MKDataBaseManager sharedDatabaseManager];
     //[self insertSomeObjecs];
     //[self queryWithCondition];
     //[self unpdateWithCondition];
-    [self queryWithCondition2];
+    //[self queryWithCondition2];
     
     _beginTime = CFAbsoluteTimeGetCurrent();
-    
-    
-    
 }
 
 - (void)insertSomeObjecs{
@@ -45,7 +42,6 @@
         employee.degree = i % 8;
         employee.position = [NSString stringWithFormat:@"position%d",i];
         BOOL success = [_dataManager insertWithObject:employee];
-        
         NSLog(@"insert result: %@",success ? @"success":@"failure");
         
         

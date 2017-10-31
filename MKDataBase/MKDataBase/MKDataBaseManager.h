@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MKSQLQuery.h"
-#import "MKRange.h"
-
+#import "MKSql.h"
 @interface MKDataBaseManager: NSObject
 
 - (instancetype)init __attribute ((unavailable("init is not available call sharedDatabaseManager instead")));
@@ -79,10 +78,10 @@
  *
  *  @return the objects array
  */
-- (NSArray *)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
+- (NSArray *)queryObjectsWithRange:(MKSql *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
 
 
-- (void)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
+- (void)queryObjectsWithRange:(MKSql *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
 
 /**
  *  @param className the tableName
@@ -95,9 +94,9 @@
  *
  */
 
-- (NSArray *)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
+- (NSArray *)queryObjectsWithRanges:(NSArray <MKSql *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName;
 
-- (void)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
+- (void)queryObjectsWithRanges:(NSArray <MKSql *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock;
 
 /**
  *  query one object frome the database
@@ -151,7 +150,7 @@
 
 - (BOOL)deleteTable:(NSString *)tableName condition:(NSDictionary *)condition;
 
-- (BOOL)deleteTable:(NSString *)tableName range:(MKRange *)range condition:(NSDictionary *)condition;
+- (BOOL)deleteTable:(NSString *)tableName range:(MKSql *)range condition:(NSDictionary *)condition;
 
 @end
 
