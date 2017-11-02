@@ -16,7 +16,10 @@
 @implementation MKSql
 
 #pragma mark - setter
-
++ (instancetype)make {
+    
+    return [[MKSql alloc]init];
+}
 - (instancetype)init {
 
     self = [super init];

@@ -1,30 +1,29 @@
 //
-//  MKDataBaseManager.m
+//  MKDBWrapper.m
 //  Pods
 //
 //  Created by Mike on 7/6/16.
 //
 //
 
-#import "MKDataBaseManager.h"
+#import "MKDBWrapper.h"
 #import "FMDatabase.h"
 #import "MKSQLQuery.h"
 #import <objc/runtime.h>
 
-@interface MKDataBaseManager () {
+@interface MKDBWrapper () {
     
     FMDatabase *_database;
     dispatch_queue_t _mkqueue;
     NSLock *_lock;
-    
 }
 
 @property (nonatomic, strong, readwrite) MKSQLQuery *query;
 
 @end
 
-@implementation MKDataBaseManager
-static MKDataBaseManager *manager = nil;
+@implementation MKDBWrapper
+static MKDBWrapper *manager = nil;
 
 - (instancetype)init
 {
@@ -44,7 +43,7 @@ static MKDataBaseManager *manager = nil;
 {
     NSString *doucmentpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     NSLog(@"db path : %@",doucmentpath);
-    return [doucmentpath stringByAppendingPathComponent:@"MKDataBaseManager.db"];
+    return [doucmentpath stringByAppendingPathComponent:@"MKDBWrapper.db"];
 }
 
 /**
@@ -88,7 +87,7 @@ static MKDataBaseManager *manager = nil;
 /**
   create the database manager
  */
-+ (MKDataBaseManager *)sharedDatabaseManager
++ (MKDBWrapper *)sharedInstance
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -123,11 +122,9 @@ static MKDataBaseManager *manager = nil;
  */
 - (BOOL)isCreateTableSuccessWithObject:(id)object
 {
-    
     NSString *sql = _query.creat(object).sql;
     BOOL isCreatSuccess = [self p_executeUpdateSQL:sql];
     return isCreatSuccess;
-
 }
 
 // get the class's name
@@ -198,7 +195,7 @@ static MKDataBaseManager *manager = nil;
 
 @end
 
-@implementation MKDataBaseManager (Add)
+@implementation MKDBWrapper (Add)
 
 /**
  insert the data
@@ -248,12 +245,12 @@ static MKDataBaseManager *manager = nil;
 
 @end
 
-@implementation MKDataBaseManager (Query)
+@implementation MKDBWrapper (Query)
 
 /**
  query all the objects, which satisfy the conditions
  */
-- (NSArray *)queryObjectsWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
+- (NSArray *)queryObjectsWithCondition:(MKSql *)condition objName:(NSString *)objcName {
 
     [_lock lock];
     NSString *sqlLanguage = _query.selectM(objcName).condition(condition).sql;
@@ -266,7 +263,7 @@ static MKDataBaseManager *manager = nil;
 
 }
 
-- (void)queryObjectsInBackGroundWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
+- (void)queryObjectsInBackGroundWithCondition:(MKSql *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
     
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
@@ -278,67 +275,6 @@ static MKDataBaseManager *manager = nil;
     });
     
     
-}
-
-- (NSArray *)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName{
-
-    [_lock lock];
-    NSString *sqlLanguage = _query.selectM(objcName).range(MKRangeTypeDefault,range).condition(conditionDic).sql;
-    FMResultSet *results = [self p_executeQuerySQL:sqlLanguage];
-    NSArray *resultModels = [self p_getObjcsWithResutltSet:results className:objcName];
-    [_database close];
-    [_lock unlock];
-    return resultModels;
-    
-}
-
-- (void)queryObjectsWithRange:(MKRange *)range condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
-
-    if (!callBackBlock) return;
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_async(_mkqueue, ^{
-        
-        __strong typeof(weakSelf) self = weakSelf;
-        NSArray *foundObjs = [self queryObjectsWithRange:range condition:conditionDic objName:objcName];
-        callBackBlock(foundObjs);
-    });
-}
-
-#warning The selection type MKRangeType should be open to user, how can I do it ?
-- (NSArray *)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName {
-    
-    [_lock lock];
-    _query.selectM(objcName);
-    for (MKRange *temptRagne in ranges) {
-        
-        _query.range(MKRangeTypeDefault,temptRagne);
-    }
-    
-    _query.condition (conditionDic);
-    NSString *sqlLanguage = _query.sql;
-    FMResultSet *results = [self p_executeQuerySQL:sqlLanguage];
-    NSArray *resultModels = [self p_getObjcsWithResutltSet:results className:objcName];
-    [_database close];
-    [_lock unlock];
-    return resultModels;
-
-};
-
-
-- (void)queryObjectsWithRanges:(NSArray <MKRange *> *)ranges condition:(NSDictionary *)conditionDic objName:(NSString *)objcName callBackBlock:(void(^)(NSArray *foundObjcs))callBackBlock{
-
-    if (!callBackBlock) return;
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(_mkqueue, ^{
-        
-        __strong typeof(weakSelf) self = weakSelf;
-        NSArray *foundObjcs = [self queryObjectsWithRanges:ranges condition:conditionDic objName:objcName];
-        callBackBlock(foundObjcs);
-        
-    });
-    
-
 }
 
 - (NSArray *)p_getObjcsWithResutltSet:(FMResultSet *)resultSet className:(NSString *)className {
@@ -401,18 +337,16 @@ static MKDataBaseManager *manager = nil;
     
 }
 
-
 /**
  query the object which satisfy the conditioan
  */
-- (id)queryObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName {
+- (id)queryObjectWithCondition:(MKSql *)condition objName:(NSString *)objcName {
 
     NSArray *conditionResultArray =  [self queryObjectsWithCondition:condition objName:objcName];
     return [conditionResultArray firstObject];
-
 }
 
-- (void)queryObjectWithCondition:(NSDictionary *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
+- (void)queryObjectWithCondition:(MKSql *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
     
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
@@ -429,9 +363,9 @@ static MKDataBaseManager *manager = nil;
 @end
 
 #pragma mark - update database
-@implementation MKDataBaseManager (Update)
+@implementation MKDBWrapper (Update)
 
-- (BOOL)updateTable:(NSString *)tableName newKeyValue:(NSDictionary *)newValuesDic condition:(NSDictionary *)condition {
+- (BOOL)updateTable:(NSString *)tableName newKeyValue:(NSDictionary *)newValuesDic condition:(MKSql *)condition {
 
     /**
      * Example: UPDATE Person SET Address = 'Zhongshan 23', City = 'Nanjing' WHERE LastName = 'Wilson'
@@ -446,7 +380,7 @@ static MKDataBaseManager *manager = nil;
 /**
  * update the database by object
  */
-- (BOOL)updateTableWithNewObjc:(id)tableObject condition:(NSDictionary *)condition{
+- (BOOL)updateTableWithNewObjc:(id)tableObject condition:(MKSql *)condition{
 
     NSString *sqlLanguage = _query.updateObj(tableObject).condition(condition).sql;
     // assemble the sql language
@@ -457,22 +391,9 @@ static MKDataBaseManager *manager = nil;
 
 @end
 
-@implementation MKDataBaseManager (Delete)
+@implementation MKDBWrapper (Delete)
 
-- (BOOL)deleteTable:(NSString *)tableName range:(MKRange *)range condition:(NSDictionary *)condition {
-    
-    /**
-     * Example: DELETE FROM Person WHERE LastName = 'Wilson'
-     */
-
-    NSString *sqlLanguage = _query.deletes(tableName).range(MKRangeTypeDefault,range).condition(condition).sql;
-    BOOL isDeleteSuccess =  [self p_executeUpdateSQL:sqlLanguage];
-    
-    return isDeleteSuccess;
-    
-}
-
-- (BOOL)deleteTable:(NSString *)tableName condition:(NSDictionary *)condition {
+- (BOOL)deleteTable:(NSString *)tableName condition:(MKSql *)condition {
     
     NSString *sqlLanguage = _query.deletes(tableName).condition(condition).sql;
     BOOL isDeleteSuccess =  [self p_executeUpdateSQL:sqlLanguage];

@@ -19,6 +19,7 @@ typedef MKSql *(^NotEqu)(NSString *colume, id value);
 
 @interface MKSql : NSObject
 
++ (instancetype)make;
 /**
  * Equal
  * colume, value

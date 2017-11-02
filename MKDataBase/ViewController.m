@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "MKDataBaseManager.h"
+#import "MKDBWrapper.h"
 #import "MKEmployee.h"
 @interface ViewController ()
 
-@property (nonatomic, strong) MKDataBaseManager *dataManager;
+@property (nonatomic, strong) MKDBWrapper *dataManager;
 @property (nonatomic, assign) double beginTime;
 
 @end
@@ -22,12 +22,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
-    _dataManager = [MKDataBaseManager sharedDatabaseManager];
+    _dataManager = [MKDBWrapper sharedInstance];
     //[self insertSomeObjecs];
     //[self queryWithCondition];
     //[self unpdateWithCondition];
     //[self queryWithCondition2];
-    
+    [self queryWithCondition];
     _beginTime = CFAbsoluteTimeGetCurrent();
 }
 
@@ -44,22 +44,15 @@
         BOOL success = [_dataManager insertWithObject:employee];
         NSLog(@"insert result: %@",success ? @"success":@"failure");
         
-        
     }
-    
 }
 
 - (void)queryWithCondition{
     
     for (int i = 0 ; i < 1000; i ++) {
         
-        MKRange *range = [[MKRange alloc]init];
-        range.name = @"age";
-        range.start = 10;
-        range.end = 80;
-        
-        NSDictionary *condition = @{@"degree":@"4"};
-        NSArray *conditionResult = [_dataManager queryObjectsWithRange:range condition:condition objName:@"MKEmployee"];
+        MKSql *sql = [MKSql make].equ(@"age",@"36");
+        NSArray *conditionResult = [_dataManager queryObjectsWithCondition:sql objName:@"MKEmployee"];
         NSLog(@"find result:%@",conditionResult);
         if (i == 999) {
             
@@ -73,28 +66,28 @@
 }
 
 - (void)queryWithCondition2{
-    
-    for (int i = 0 ; i < 1000; i ++) {
-        
-        MKRange *range = [[MKRange alloc]init];
-        range.name = @"age";
-        range.start = 10;
-        range.end = 80;
-        
-        NSDictionary *condition = @{@"degree":@"4"};
-        [_dataManager queryObjectsWithRange:range condition:condition objName:@"MKEmployee" callBackBlock:^(NSArray *foundObjcs) {
-            
-        }];
-        
-        if (i == 999) {
-            
-            double current = CFAbsoluteTimeGetCurrent();
-            NSLog(@"consume time = %f",(current - _beginTime) * 1000.0f);
-            
-            
-        }
-        
-    }
+//    
+//    for (int i = 0 ; i < 1000; i ++) {
+//        
+//        MKRange *range = [[MKRange alloc]init];
+//        range.name = @"age";
+//        range.start = 10;
+//        range.end = 80;
+//        
+//        NSDictionary *condition = @{@"degree":@"4"};
+//        [_dataManager queryObjectsWithRange:range condition:condition objName:@"MKEmployee" callBackBlock:^(NSArray *foundObjcs) {
+//            
+//        }];
+//        
+//        if (i == 999) {
+//            
+//            double current = CFAbsoluteTimeGetCurrent();
+//            NSLog(@"consume time = %f",(current - _beginTime) * 1000.0f);
+//            
+//            
+//        }
+//        
+//    }
 
 }
 - (void)unpdateWithCondition{
