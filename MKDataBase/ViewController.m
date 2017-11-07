@@ -27,7 +27,13 @@
     //[self queryWithCondition];
     //[self unpdateWithCondition];
     //[self queryWithCondition2];
-    [self queryWithCondition];
+    //[self queryWithCondition];
+    //[self queryObjectWithName];
+    
+//   [self insertSomeObjecs];
+//    [self queryWithCondition];
+    [self queryObjectWithName];
+
     _beginTime = CFAbsoluteTimeGetCurrent();
 }
 
@@ -45,6 +51,11 @@
         NSLog(@"insert result: %@",success ? @"success":@"failure");
         
     }
+}
+
+- (void)queryObjectWithName {
+
+    NSArray *models = [_dataManager queryObjectsWithName:@"MKEmployee"];
 }
 
 - (void)queryWithCondition{

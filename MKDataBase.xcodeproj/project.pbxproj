@@ -25,6 +25,8 @@
 		273172A91E14E5D2007F3EF3 /* MKDBWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A41E14E5D1007F3EF3 /* MKDBWrapper.m */; };
 		273172AB1E14E5D2007F3EF3 /* MKSQLQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */; };
 		278E595D1FA8B88F0057E8A9 /* MKSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 278E595C1FA8B88F0057E8A9 /* MKSql.m */; };
+		27BE38631FB144730041FE97 /* MKMemCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BE38621FB144730041FE97 /* MKMemCache.m */; };
+		27DA8BBD1FB15F4E00096180 /* MKMemCacheTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DA8BBC1FB15F4E00096180 /* MKMemCacheTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +83,10 @@
 		273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSQLQuery.m; sourceTree = "<group>"; };
 		278E595B1FA8B88F0057E8A9 /* MKSql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSql.h; sourceTree = "<group>"; };
 		278E595C1FA8B88F0057E8A9 /* MKSql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSql.m; sourceTree = "<group>"; };
+		27BE38611FB144720041FE97 /* MKMemCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKMemCache.h; sourceTree = "<group>"; };
+		27BE38621FB144730041FE97 /* MKMemCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKMemCache.m; sourceTree = "<group>"; };
+		27BE38641FB147D10041FE97 /* MKDBModelProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKDBModelProtocol.h; sourceTree = "<group>"; };
+		27DA8BBC1FB15F4E00096180 /* MKMemCacheTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKMemCacheTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +169,7 @@
 			children = (
 				273172591E14E3F8007F3EF3 /* MKDataBaseTests.m */,
 				2731725B1E14E3F8007F3EF3 /* Info.plist */,
+				27DA8BBC1FB15F4E00096180 /* MKMemCacheTest.m */,
 			);
 			path = MKDataBaseTests;
 			sourceTree = "<group>";
@@ -203,6 +210,9 @@
 				273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */,
 				278E595B1FA8B88F0057E8A9 /* MKSql.h */,
 				278E595C1FA8B88F0057E8A9 /* MKSql.m */,
+				27BE38611FB144720041FE97 /* MKMemCache.h */,
+				27BE38621FB144730041FE97 /* MKMemCache.m */,
+				27BE38641FB147D10041FE97 /* MKDBModelProtocol.h */,
 			);
 			path = MKDataBase;
 			sourceTree = "<group>";
@@ -359,6 +369,7 @@
 				273172AB1E14E5D2007F3EF3 /* MKSQLQuery.m in Sources */,
 				278E595D1FA8B88F0057E8A9 /* MKSql.m in Sources */,
 				2731729B1E14E48F007F3EF3 /* MKEmployee.m in Sources */,
+				27BE38631FB144730041FE97 /* MKMemCache.m in Sources */,
 				273172841E14E422007F3EF3 /* FMDatabaseAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,6 +378,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27DA8BBD1FB15F4E00096180 /* MKMemCacheTest.m in Sources */,
 				2731725A1E14E3F8007F3EF3 /* MKDataBaseTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

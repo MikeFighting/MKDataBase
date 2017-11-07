@@ -42,7 +42,7 @@
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531238717.352599"
+                  timestampString = "531733748.94245"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "52"
@@ -57,7 +57,7 @@
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531238717.361219"
+                  timestampString = "531733748.945702"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "52"
@@ -72,7 +72,7 @@
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531238717.364238"
+                  timestampString = "531733748.950247"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "52"
@@ -80,6 +80,22 @@
                   offsetFromSymbolStart = "39">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBase/MKDataBase/MKDBWrapper.m"
+            timestampString = "531713902.105975"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "-p_executeQuerySQL:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

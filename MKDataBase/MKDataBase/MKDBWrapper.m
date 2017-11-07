@@ -34,7 +34,6 @@ static MKDBWrapper *manager = nil;
         _query = [[MKSQLQuery alloc]init];
         _mkqueue = dispatch_queue_create("com.mike.mkdatabase.queue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc]init];
-        
     }
     return self;
 }
@@ -279,7 +278,7 @@ static MKDBWrapper *manager = nil;
 
 - (NSArray *)p_getObjcsWithResutltSet:(FMResultSet *)resultSet className:(NSString *)className {
 
-    
+    NSAssert(resultSet, @"The inputed resultSet can not be Nil");
     NSArray *attributes = [self p_propertyArrayWithClassName:className];
     // iterate all the resuts and creat object
     NSMutableArray *resultModels = [NSMutableArray array];
