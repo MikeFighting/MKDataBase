@@ -168,8 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				273172591E14E3F8007F3EF3 /* MKDataBaseTests.m */,
-				2731725B1E14E3F8007F3EF3 /* Info.plist */,
 				27DA8BBC1FB15F4E00096180 /* MKMemCacheTest.m */,
+				2731725B1E14E3F8007F3EF3 /* Info.plist */,
 			);
 			path = MKDataBaseTests;
 			sourceTree = "<group>";

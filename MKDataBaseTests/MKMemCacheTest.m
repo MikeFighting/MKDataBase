@@ -35,11 +35,47 @@
     [_memCache warmUpMemeCache];
 }
 
+- (void)testProduceAndConsumer {
+
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    dispatch_barrier_async(queue, ^{
+       
+        
+        for (int i = 0; i < 100000; i ++) {
+            
+            [array addObject:@(i)];
+        }
+    });
+    
+    dispatch_barrier_async(queue, ^{
+        
+        for (int i = 0; i < array.count; i ++) {
+            
+            sleep(0.01);
+            NSLog(@"number %@",array[i]);
+        }
+        
+    });
+    
+}
+
 - (void)testQueryTableWithRegex {
 
     NSString *string = [NSString stringWithFormat:@" age BETWEEN {20, 30}"];
     NSArray *datas = [_memCache queryTable:@"MKEmployee" withRegx:string];
     XCTAssertTrue(datas,@"使用Predicate来查找MKEmployee");
+}
+
+- (void)testQueryAndUpdate {
+    
+    NSString *string = [NSString stringWithFormat:@" age BETWEEN {20, 30}"];
+    NSArray *datas = [_memCache queryTable:@"MKEmployee" withRegx:string];
+    XCTAssertTrue(datas,@"使用Predicate来查找MKEmployee");
+    
+    
 }
 
 - (void)tearDown {

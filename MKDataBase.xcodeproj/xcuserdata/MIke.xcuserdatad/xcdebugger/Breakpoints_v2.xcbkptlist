@@ -42,7 +42,7 @@
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531733748.94245"
+                  timestampString = "531826427.551947"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "52"
@@ -57,7 +57,7 @@
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531733748.945702"
+                  timestampString = "531826427.557121"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "52"
@@ -72,7 +72,7 @@
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531733748.950247"
+                  timestampString = "531826427.560815"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "52"
@@ -95,6 +95,54 @@
             startingLineNumber = "81"
             endingLineNumber = "81"
             landmarkName = "-p_executeQuerySQL:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBaseTests/MKMemCacheTest.m"
+            timestampString = "531825272.242517"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "-testProduceAndConsumer"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBase/ViewController.m"
+            timestampString = "531826426.513896"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "-testQueryAndAdd"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBase/ViewController.m"
+            timestampString = "531826426.513896"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "-testQueryAndAdd"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

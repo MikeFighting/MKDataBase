@@ -14,6 +14,7 @@
 @property(nonatomic, strong) NSArray *tableClasses;
 @property(nonatomic, copy) NSString *dbPath;
 
++ (instancetype)sharedInstance;
 - (void)warmUpMemeCache;
 - (NSArray *)queryTable:(NSString *)table withPredicate:(NSPredicate *)prediact;
 - (NSArray *)queryTable:(NSString *)table withRegx:(NSString *)regx;
