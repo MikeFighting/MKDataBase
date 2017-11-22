@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6867E8704C46F02AAECC50E86EED604D5CB4977F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6867E8704C46F02AAECC50E86EED604D5CB4977F" : 9223372036854775807,
+    "E57E353B359CD099A49EA017B5777BA9959E2924" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "657ECB67-DD99-47FF-8E70-8D4C8F511C1E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6867E8704C46F02AAECC50E86EED604D5CB4977F" : "MKDataBase\/",
+    "E57E353B359CD099A49EA017B5777BA9959E2924" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MKDataBase",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MKDataBase.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/MikeFighting\/MKDataBase.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6867E8704C46F02AAECC50E86EED604D5CB4977F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "gitlab.beilou.com:app\/ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E57E353B359CD099A49EA017B5777BA9959E2924"
+    }
+  ]
+}
