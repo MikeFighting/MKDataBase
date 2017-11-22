@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MKDBModelProtocol.h"
 @interface MKEmployee : NSObject
 
 @property (nonatomic, copy) NSString *name;

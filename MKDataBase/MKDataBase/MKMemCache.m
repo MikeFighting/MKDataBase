@@ -28,15 +28,20 @@ static NSString *const MKINSERT_KEY = @"MK_INSERT_KEY";
 static dispatch_semaphore_t _memeCacheLock;
 
 void UncaughtExceptionHandler(NSException *exception) {
-
-    [[MKMemCache sharedInstance] updateDatas];
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    MKMemCache *memCache = [MKMemCache sharedInstance];
+    [memCache performSelector:NSSelectorFromString(@"synMemAndDataBase")];
+#pragma clang diagnostic pop
+    
 }
 
 @implementation MKMemCache
 
 + (instancetype)sharedInstance {
 
-    __block MKMemCache *memCache = nil;
+    static MKMemCache *memCache = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
@@ -104,21 +109,38 @@ void UncaughtExceptionHandler(NSException *exception) {
         
         NSArray *tableDatas = [self.tables objectForKey:table];
         resultArray = [tableDatas filteredArrayUsingPredicate:prediact];
+        
     });
     
     return resultArray;
 }
 
-
 - (void)insertObject:(id<MKDBModelProtocol>)object {
-
-   NSStringFromClass(object.class);
-   dispatch_barrier_async(_globalQueue, ^{
-       
-       [_updateDatas addObject:@{MKINSERT_KEY:object}];
-       
-   });
     
+    NSString *tableName = NSStringFromClass(object.class);
+    NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
+    dispatch_barrier_async(_globalQueue, ^{
+        
+        [_updateDatas addObject:@{MKINSERT_KEY:object}];
+        NSMutableArray *originArray = [NSMutableArray arrayWithArray:[_tables objectForKey:tableName]];
+        [originArray addObject:object];
+        [_tables setObject:originArray forKey:tableName];
+        
+    });
+}
+
+- (void)insertObject:(id<MKDBModelProtocol>)object handler:(MKOperationResultBlock)resultBlock {
+
+    NSString *tableName = NSStringFromClass(object.class);
+    NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
+    dispatch_barrier_async(_globalQueue, ^{
+        
+        [_updateDatas addObject:@{MKINSERT_KEY:object}];
+        NSMutableArray *originArray = [NSMutableArray arrayWithArray:[_tables objectForKey:tableName]];
+        [originArray addObject:object];
+        [_tables setObject:originArray forKey:tableName];
+        resultBlock(YES);
+    });
 }
 
 - (void)deletObject:(id)object {
@@ -128,7 +150,6 @@ void UncaughtExceptionHandler(NSException *exception) {
         [_updateDatas addObject:@{MKDELETE_KEY:object}];
         
     });
-
 }
 
 - (void)updateObject:(id)object withDic:(NSDictionary *)newDic {
@@ -142,39 +163,55 @@ void UncaughtExceptionHandler(NSException *exception) {
     
 }
 
-- (void)synMemAndDataBase {
+- (void)p_updateDataBase {
+
+    
+    if (_updateDatas.count == 0) {
+        return;
+    }
+    
+    NSInteger updateNum = 0;
+    for (int i = 0 ; i < _updateDatas.count; i ++) {
+        
+        NSDictionary *updateDic = _updateDatas[i];
+        [updateDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL * _Nonnull stop) {
+            
+            if ([key isEqualToString:MKUPDATE_KEY]) {
+                NSLog(@"更新了一条数据");
+                
+                [_dbWrapper updateTableWithNewObjc:obj condition:nil];
+                
+            }else if ([key isEqualToString:MKINSERT_KEY]) {
+                
+                NSLog(@"准备添加一条数据");
+                [_dbWrapper insertWithObject:obj];
+                NSLog(@"添加了一条数据");
+            }else if ([key isEqualToString:MKDELETE_KEY]) {
+                NSLog(@"更新了一条数据");
+            }
+            
+        }];
+        
+        updateNum += 1;
+    }
+    [_updateDatas removeObjectsInRange:NSMakeRange(0, updateNum)];
+}
+
+- (void)asynMemAndDataBase {
     
     dispatch_async(_queue, ^{
        
-        if (_updateDatas.count == 0) {
-            return;
-        }
-        
-        NSInteger updateNum = 0;
-        for (int i = 0 ; i < _updateDatas.count; i ++) {
-            
-            NSDictionary *updateDic = _updateDatas[i];
-            [updateDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL * _Nonnull stop) {
-                
-                if ([key isEqualToString:MKUPDATE_KEY]) {
-                    NSLog(@"更新了一条数据");
-                    
-                    [_dbWrapper updateTableWithNewObjc:obj condition:nil];
-                }else if ([key isEqualToString:MKINSERT_KEY]) {
-                    NSLog(@"添加了一条数据");
-                    [_dbWrapper insertWithObject:obj];
-                }else if ([key isEqualToString:MKDELETE_KEY]) {
-                    NSLog(@"更新了一条数据");
-                }
-                
-            }];
-            
-            updateNum += 1;
-        }
-        [_updateDatas removeObjectsInRange:NSMakeRange(0, updateNum)];
-
+        [self p_updateDataBase];
     });
     
+}
+
+- (void)synMemAndDataBase {
+
+    dispatch_sync(_queue, ^{
+        
+        [self p_updateDataBase];
+    });
 }
 
 #pragma mark - private method
@@ -183,14 +220,15 @@ void UncaughtExceptionHandler(NSException *exception) {
     [self tables];
     [self dbWrapper];
     [self globalQueue];
+    [self queue];
     [self updateDatas];
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     /*
      *Update the database if the App enter background or we received memory warning.
      */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(synMemAndDataBase) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(synMemAndDataBase) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-    //TODO:synMemAndDataBase if the runloop is idel.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(asynMemAndDataBase) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(asynMemAndDataBase) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    //TODO:asynMemAndDataBase if the runloop is idel.
     
 }
 

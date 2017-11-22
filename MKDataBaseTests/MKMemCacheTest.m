@@ -76,7 +76,29 @@
     
     NSString *string = [NSString stringWithFormat:@" age BETWEEN {20, 30}"];
     NSArray *datas = [_memCache queryTable:@"MKEmployee" withRegx:string];
+    
+    for (MKEmployee *employee in datas) {
+        
+        [_memCache updateObject:employee withDic:@{}];
+    }
+    
     XCTAssertTrue(datas,@"使用Predicate来查找MKEmployee");
+}
+
+- (void)testInsertObject {
+
+    MKEmployee *insertEmployee = [[MKEmployee alloc]init];
+    insertEmployee.name = @"战狼II";
+    insertEmployee.age = 28;
+    insertEmployee.position = @"Auditing";
+    insertEmployee.experience = 2.4;
+    insertEmployee.degree = 12;
+    [_memCache insertObject:insertEmployee handler:^(BOOL result) {
+        
+        XCTAssert(result,@"MemCache insert Failure");
+        
+    }];
+    
     
 }
 

@@ -16,6 +16,7 @@
     FMDatabase *_database;
     dispatch_queue_t _mkqueue;
     NSLock *_lock;
+    NSArray *_ignoreProperties;
 }
 
 @property (nonatomic, strong, readwrite) MKSQLQuery *query;
@@ -34,6 +35,7 @@ static MKDBWrapper *manager = nil;
         _query = [[MKSQLQuery alloc]init];
         _mkqueue = dispatch_queue_create("com.mike.mkdatabase.queue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc]init];
+        _ignoreProperties = @[@"hash",@"description",@"superclass",@"debugDescription"];
     }
     return self;
 }
@@ -167,7 +169,6 @@ static MKDBWrapper *manager = nil;
     }
     free(properties);
     
-    
     return [NSArray arrayWithArray:attributes];
 
 }
@@ -292,18 +293,21 @@ static MKDBWrapper *manager = nil;
         
         for (int i = 0; i < attributes.count; i++)
         {
-            NSString *valueString = [resultSet stringForColumn:attributes[i]];
+            NSString *attributeName = attributes[i];
+            NSString *valueString = [resultSet stringForColumn:attributeName];
             if (valueString.length == 0) valueString = @"";
             // set the value
-            [obj setValue:valueString forKey:attributes[i]];
+            if (![_ignoreProperties containsObject:attributeName]) {
+               [obj setValue:valueString forKey:attributeName];
+            }
         }
         // add to the datasource
         [resultModels addObject:obj];
     }
 
     return [NSArray arrayWithArray:resultModels];
-
 }
+
 
 - (void)queryObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock{
 
@@ -395,11 +399,7 @@ static MKDBWrapper *manager = nil;
     
     NSString *sqlLanguage = _query.deletes(tableName).condition(condition).sql;
     BOOL isDeleteSuccess =  [self p_executeUpdateSQL:sqlLanguage];
-    
     return isDeleteSuccess;
-    
-
-    
 }
 
 @end

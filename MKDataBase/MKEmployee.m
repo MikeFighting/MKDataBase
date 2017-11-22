@@ -10,6 +10,11 @@
 
 @implementation MKEmployee
 
+- (NSString *)primaryKey  {
+
+    return @"name";
+}
+
 - (NSString *)description{
 
     return [NSString stringWithFormat:@"%@:%@",[self class],
