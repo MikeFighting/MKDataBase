@@ -11,9 +11,10 @@
 @interface MKEmployee : NSObject
 
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *position;
 @property (nonatomic, assign) NSInteger age;
 @property (nonatomic, assign) CGFloat experience;
 @property (nonatomic, assign) NSInteger degree;
-@property (nonatomic, copy) NSString *position;
+
 
 @end

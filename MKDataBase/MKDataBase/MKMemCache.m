@@ -21,11 +21,11 @@
 
 @end
 
-static NSString const *MKUPDATE_KEY = @"MK_UPDATE_KEY";
-static NSString const *MKDELETE_KEY = @"MK_DELETE_KEY";
-static NSString const *MKINSERT_KEY = @"MK_INSERT_KEY";
+static NSString *const MKUPDATE_KEY = @"MK_UPDATE_KEY";
+static NSString *const MKDELETE_KEY = @"MK_DELETE_KEY";
+static NSString *const MKINSERT_KEY = @"MK_INSERT_KEY";
 
-static dispatch_semaphore_t _memeCacheL
+static dispatch_semaphore_t _memeCacheLock;
 
 void UncaughtExceptionHandler(NSException *exception) {
 
@@ -56,17 +56,27 @@ void UncaughtExceptionHandler(NSException *exception) {
 }
 
 #pragma mark - public method
--(void)warmUpMemeCache {
+-(BOOL)warmUpMemeCache {
     
     NSAssert(self.tableClasses.count, @"Please set all the tables' name firstly");
     NSAssert(self.dbPath.length, @"Please set the database path firstly");
-    
-    for (Class Table in self.tableClasses) {
+    @try {
         
-        NSString *tableName = NSStringFromClass(Table);
-        NSArray *models = [_dbWrapper queryObjectsWithName:tableName];
-        [self.tables setObject:models forKey:tableName];
+        for (Class Table in self.tableClasses) {
+            
+            NSString *tableName = NSStringFromClass(Table);
+            NSArray *models = [_dbWrapper queryObjectsWithName:tableName];
+            [self.tables setObject:models forKey:tableName];
+        }
+        
+        return YES;
+        
+    } @catch (NSException *exception) {
+        NSLog(@"MKDBWrapper: %@--%@",exception.name, exception.reason);
+        return NO;
     }
+    
+   
 }
 
 - (NSArray *)queryTable:(NSString *)table withRegx:(NSString *)regex {
@@ -141,34 +151,28 @@ void UncaughtExceptionHandler(NSException *exception) {
         }
         
         NSInteger updateNum = 0;
-        
         for (int i = 0 ; i < _updateDatas.count; i ++) {
-           
+            
             NSDictionary *updateDic = _updateDatas[i];
             [updateDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL * _Nonnull stop) {
                 
-                if ([key isEqualToString:@"MK_UPDATE_KEY"]) {
+                if ([key isEqualToString:MKUPDATE_KEY]) {
                     NSLog(@"更新了一条数据");
                     
                     [_dbWrapper updateTableWithNewObjc:obj condition:nil];
-                }else if ([key isEqualToString:@"MKINSERT_KEY"]) {
+                }else if ([key isEqualToString:MKINSERT_KEY]) {
                     NSLog(@"添加了一条数据");
                     [_dbWrapper insertWithObject:obj];
                 }else if ([key isEqualToString:MKDELETE_KEY]) {
                     NSLog(@"更新了一条数据");
-                    
-        
                 }
                 
             }];
             
             updateNum += 1;
         }
-        
-        
-        
-        
-    
+        [_updateDatas removeObjectsInRange:NSMakeRange(0, updateNum)];
+
     });
     
 }

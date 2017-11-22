@@ -203,19 +203,6 @@
     return _sql;
 }
 
-- (NSArray *)p_frontConditionIds {
-
-    
-    return @[@">=",@">=",@">",@">"];
-
-}
-
-- (NSArray *)p_trailConditionIds {
-
-    return @[@"<=",@"<=",@"<",@"<"];
-
-}
-
 - (NSString *)p_equalStringFromeDic:(NSDictionary *)dictionary {
 
 

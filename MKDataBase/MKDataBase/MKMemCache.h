@@ -15,13 +15,12 @@
 @property(nonatomic, copy) NSString *dbPath;
 
 + (instancetype)sharedInstance;
-- (void)warmUpMemeCache;
+- (BOOL)warmUpMemeCache;
 - (NSArray *)queryTable:(NSString *)table withPredicate:(NSPredicate *)prediact;
 - (NSArray *)queryTable:(NSString *)table withRegx:(NSString *)regx;
 
 - (void)insertObject:(id<MKDBModelProtocol>)object;
 - (void)deletObject:(id)object;
 - (void)updateObject:(id)object withDic:(NSDictionary *)newDic;
-
 
 @end

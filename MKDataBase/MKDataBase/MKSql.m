@@ -36,17 +36,19 @@
     
         [self p_appendANDifNeed];
         [_mutableSql appendFormat:@"%@", [NSString stringWithFormat:@"%@ = %@",colume,value]];
+        [self p_addExtraInfoForObj:value TargetString:@"="];
         return self;
     };
 }
 
 - (NotEqu)notEqu {
 
-    return ^(NSString *colume, id object) {
+    return ^(NSString *colume, id value) {
     
         [self p_appendANDifNeed];
         
-        [_mutableSql appendString:[NSString stringWithFormat:@"%@ != @ %@",colume,object]];
+        [_mutableSql appendString:[NSString stringWithFormat:@"%@ != %@",colume,value]];
+        [self p_addExtraInfoForObj:value TargetString:@"!="];
         
         return self;
     };
@@ -58,6 +60,7 @@
     
         [self p_appendANDifNeed];
         [_mutableSql appendString:[NSString stringWithFormat:@" %@ < %@",colume,value]];
+        [self p_addExtraInfoForObj:value TargetString:@"<"];
         return self;
     };
     
@@ -69,6 +72,7 @@
         
         [self p_appendANDifNeed];
         [_mutableSql appendString:[NSString stringWithFormat:@" %@ <= %@",colume,value]];
+        [self p_addExtraInfoForObj:value TargetString:@"<="];
         return self;
     };
 }
@@ -79,6 +83,7 @@
         
         [self p_appendANDifNeed];
         [_mutableSql appendString:[NSString stringWithFormat:@" %@ > %@",colume,value]];
+        [self p_addExtraInfoForObj:value TargetString:@">"];
         return self;
     };
 }
@@ -89,10 +94,23 @@
         
         [self p_appendANDifNeed];
         [_mutableSql appendString:[NSString stringWithFormat:@" %@ >= %@",colume,value]];
+        [self p_addExtraInfoForObj:value TargetString:@">="];
         return self;
     };
 }
 
+// The ' should be add if the colume is String Type. Otherwise, the 'no such column' will occur.
+- (void)p_addExtraInfoForObj:(id)obj TargetString:(NSString *)target {
+
+    if (![obj isKindOfClass:[NSString class]]) {
+        return;
+    }
+    
+    NSRange targetRange = [_mutableSql rangeOfString:target options:NSBackwardsSearch];
+    [_mutableSql insertString:@"'" atIndex:targetRange.location + targetRange.length + 1];
+    [_mutableSql appendString:@"'"];
+    
+}
 
 #pragma mark - getter
 - (NSMutableString *)mutableSql {

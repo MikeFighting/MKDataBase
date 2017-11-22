@@ -333,7 +333,6 @@ static MKDBWrapper *manager = nil;
     [_database close];
     [_lock unlock];
     return reultModels;
-    
 }
 
 /**

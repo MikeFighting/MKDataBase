@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKSql.m"
-            timestampString = "531238716.278742"
+            timestampString = "532951003.355856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "-notEqu"
             landmarkType = "7">
             <Locations>
@@ -41,43 +41,43 @@
                   symbolName = "__15-[MKSql notEqu]_block_invoke"
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531826427.551947"
+                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
+                  timestampString = "533008548.188204"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52"
-                  offsetFromSymbolStart = "264">
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "284">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__copy_helper_block_.19"
+                  symbolName = "__copy_helper_block_.25"
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531826427.557121"
+                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
+                  timestampString = "533008548.191271"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
                   offsetFromSymbolStart = "51">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.20"
+                  symbolName = "__destroy_helper_block_.26"
                   moduleName = "MKDataBase"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Mike/Documents/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
-                  timestampString = "531826427.560815"
+                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBase/MKDataBase/MKSql.m"
+                  timestampString = "533008548.194357"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52"
-                  offsetFromSymbolStart = "39">
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "29">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -89,7 +89,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKDBWrapper.m"
-            timestampString = "531713902.105975"
+            timestampString = "532951003.355856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "81"
@@ -105,11 +105,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBaseTests/MKMemCacheTest.m"
-            timestampString = "531825272.242517"
+            timestampString = "533008547.163153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "-testProduceAndConsumer"
             landmarkType = "7">
          </BreakpointContent>
@@ -120,13 +120,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MKDataBase/ViewController.m"
-            timestampString = "531826426.513896"
+            filePath = "MKDataBaseTests/MFDBCacherTest.m"
+            timestampString = "532949443.328298"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "-testQueryAndAdd"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "-testQueryObjectWithName"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -136,13 +136,45 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MKDataBase/ViewController.m"
-            timestampString = "531826426.513896"
+            filePath = "MKDataBase/MKDataBase/MKDBWrapper.m"
+            timestampString = "533008547.163153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "-testQueryAndAdd"
+            startingLineNumber = "374"
+            endingLineNumber = "374"
+            landmarkName = "-updateTable:newKeyValue:condition:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBaseTests/MFDBCacherTest.m"
+            timestampString = "533008032.012529"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "-testUpdateWithObject"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBaseTests/MKMemCacheTest.m"
+            timestampString = "533008551.475964"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "-testWarmUp"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -59,7 +59,7 @@
 
 @interface MKDBWrapper (Delete)
 
-- (BOOL)deleteTable:(NSString *)tableName condition:(NSDictionary *)condition;
+- (BOOL)deleteTable:(NSString *)tableName condition:(MKSql *)condition;
 
 @end
 

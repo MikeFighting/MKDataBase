@@ -24,6 +24,7 @@
 		273172A21E14E55F007F3EF3 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 273172A01E14E52F007F3EF3 /* libsqlite3.0.tbd */; };
 		273172A91E14E5D2007F3EF3 /* MKDBWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A41E14E5D1007F3EF3 /* MKDBWrapper.m */; };
 		273172AB1E14E5D2007F3EF3 /* MKSQLQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */; };
+		273CB2001FC41F3000D5A445 /* MKDBCacherTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 273CB1FF1FC41F3000D5A445 /* MKDBCacherTest.m */; };
 		278E595D1FA8B88F0057E8A9 /* MKSql.m in Sources */ = {isa = PBXBuildFile; fileRef = 278E595C1FA8B88F0057E8A9 /* MKSql.m */; };
 		27BE38631FB144730041FE97 /* MKMemCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 27BE38621FB144730041FE97 /* MKMemCache.m */; };
 		27DA8BBD1FB15F4E00096180 /* MKMemCacheTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 27DA8BBC1FB15F4E00096180 /* MKMemCacheTest.m */; };
@@ -81,6 +82,7 @@
 		273172A41E14E5D1007F3EF3 /* MKDBWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKDBWrapper.m; sourceTree = "<group>"; };
 		273172A71E14E5D1007F3EF3 /* MKSQLQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSQLQuery.h; sourceTree = "<group>"; };
 		273172A81E14E5D1007F3EF3 /* MKSQLQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSQLQuery.m; sourceTree = "<group>"; };
+		273CB1FF1FC41F3000D5A445 /* MKDBCacherTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKDBCacherTest.m; sourceTree = "<group>"; };
 		278E595B1FA8B88F0057E8A9 /* MKSql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKSql.h; sourceTree = "<group>"; };
 		278E595C1FA8B88F0057E8A9 /* MKSql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSql.m; sourceTree = "<group>"; };
 		27BE38611FB144720041FE97 /* MKMemCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKMemCache.h; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				273172591E14E3F8007F3EF3 /* MKDataBaseTests.m */,
 				27DA8BBC1FB15F4E00096180 /* MKMemCacheTest.m */,
 				2731725B1E14E3F8007F3EF3 /* Info.plist */,
+				273CB1FF1FC41F3000D5A445 /* MKDBCacherTest.m */,
 			);
 			path = MKDataBaseTests;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				273CB2001FC41F3000D5A445 /* MKDBCacherTest.m in Sources */,
 				27DA8BBD1FB15F4E00096180 /* MKMemCacheTest.m in Sources */,
 				2731725A1E14E3F8007F3EF3 /* MKDataBaseTests.m in Sources */,
 			);

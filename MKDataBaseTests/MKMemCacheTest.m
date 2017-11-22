@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "MKMemCache.h"
+#import "MKEmployee.h"
 @interface MKMemCacheTest : XCTestCase
 
 @property (nonatomic, strong) MKMemCache *memCache;
@@ -26,13 +27,15 @@
     _memCache = [[MKMemCache alloc]init];
     _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
     _memCache.dbPath = dbPath;
-    [_memCache warmUpMemeCache];
-    
+    BOOL warmUpSuccess = [_memCache warmUpMemeCache];
+    XCTAssert(warmUpSuccess,@"warm up success");
 }
 
 - (void)testWarmUp {
 
-    [_memCache warmUpMemeCache];
+    BOOL warmUpSuccess = [_memCache warmUpMemeCache];
+    XCTAssert(warmUpSuccess,@"warm up success");
+
 }
 
 - (void)testProduceAndConsumer {
@@ -74,7 +77,6 @@
     NSString *string = [NSString stringWithFormat:@" age BETWEEN {20, 30}"];
     NSArray *datas = [_memCache queryTable:@"MKEmployee" withRegx:string];
     XCTAssertTrue(datas,@"使用Predicate来查找MKEmployee");
-    
     
 }
 
