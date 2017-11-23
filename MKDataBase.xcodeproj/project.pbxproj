@@ -143,7 +143,7 @@
 		2731723E1E14E3F7007F3EF3 /* MKDataBase */ = {
 			isa = PBXGroup;
 			children = (
-				2731729E1E14E4E6007F3EF3 /* MKDataBase */,
+				2731729E1E14E4E6007F3EF3 /* MKDBCacher */,
 				273172721E14E422007F3EF3 /* FMDB */,
 				273172421E14E3F7007F3EF3 /* AppDelegate.h */,
 				273172431E14E3F7007F3EF3 /* AppDelegate.m */,
@@ -206,7 +206,7 @@
 			path = FMDB;
 			sourceTree = "<group>";
 		};
-		2731729E1E14E4E6007F3EF3 /* MKDataBase */ = {
+		2731729E1E14E4E6007F3EF3 /* MKDBCacher */ = {
 			isa = PBXGroup;
 			children = (
 				273172A31E14E5D1007F3EF3 /* MKDBConnector.h */,
@@ -220,6 +220,7 @@
 				27ADA6C81FC6355B00EBEA29 /* MKRunTimeTool.h */,
 				27ADA6C91FC6355B00EBEA29 /* MKRunTimeTool.m */,
 			);
+			name = MKDBCacher;
 			path = MKDataBase;
 			sourceTree = "<group>";
 		};
