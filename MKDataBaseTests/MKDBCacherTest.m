@@ -8,10 +8,10 @@
 
 #import <XCTest/XCTest.h>
 #import "MKEmployee.h"
-#import "MKDBWrapper.h"
+#import "MKDBConnector.h"
 @interface MKDBCacherTest : XCTestCase
 
-@property (nonatomic, strong) MKDBWrapper *dataWrapper;
+@property (nonatomic, strong) MKDBConnector *dataWrapper;
 @property (nonatomic, assign) double beginTime;
 
 @end
@@ -22,7 +22,7 @@
     [super setUp];
     
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    _dataWrapper = [MKDBWrapper sharedInstance];
+    _dataWrapper = [MKDBConnector sharedInstance];
     _beginTime = CFAbsoluteTimeGetCurrent();
     
 }
@@ -39,7 +39,7 @@
         MKEmployee *employee = [[MKEmployee alloc]init];
         employee.name = [NSString stringWithFormat:@"name%d",i];
         employee.experience = i + 0.5f;
-        employee.age = i + 20;
+        employee.age = i;
         employee.degree = i % 8;
         employee.position = [NSString stringWithFormat:@"position%d",i];
         BOOL success = [_dataWrapper insertWithObject:employee];
@@ -59,7 +59,7 @@
     CFAbsoluteTime beginTime = CFAbsoluteTimeGetCurrent();
     for (int i = 0 ; i < 100; i ++) {
         
-        MKSql *sql = [MKSql make].equ(@"age",@"36");
+        MKRangeSql *sql = [MKRangeSql make].equ(@"age",@"36");
         NSArray *conditionResult = [_dataWrapper queryObjectsWithCondition:sql objName:@"MKEmployee"];
         NSLog(@"find result:%@",conditionResult);
         if (i == 99) {
@@ -72,14 +72,14 @@
 
 - (void)testUpdateWithNewCondition0{
     
-    MKSql *sqlCondition = [MKSql make].equ(@"age",@"40");
+    MKRangeSql *sqlCondition = [MKRangeSql make].equ(@"age",@"40");
     BOOL updateSuccessWithNewKeys = [_dataWrapper updateTable:@"MKEmployee" newKeyValue:@{@"name":@"MFDataBase",@"age":@(122)} condition:sqlCondition];
     NSAssert(updateSuccessWithNewKeys, @"update database failure");
 }
 
 - (void)testUpdateWithNewCondition{
     
-    MKSql *sqlCondition = [MKSql make].equ(@"degree",@(7));
+    MKRangeSql *sqlCondition = [MKRangeSql make].equ(@"degree",@(7));
     BOOL updateSuccessWithNewKeys = [_dataWrapper updateTable:@"MKEmployee" newKeyValue:@{@"name":@"MJike",@"position":@"topCoder"} condition:sqlCondition];
     XCTAssert(updateSuccessWithNewKeys, @"update database failure");
     
@@ -93,7 +93,7 @@
     employee.experience = 12.3;
     employee.degree = 10;
     employee.position = @"Coder";
-    MKSql *sqlCondition = [MKSql make].equ(@"degree",@(132));
+    MKRangeSql *sqlCondition = [MKRangeSql make].equ(@"degree",@(132));
     BOOL updateSuccess = [_dataWrapper updateTableWithNewObjc:employee condition:sqlCondition];
     XCTAssert(updateSuccess, @"update with new Employee failure");
     
@@ -103,7 +103,7 @@
     
         for (int i = 0 ; i < 1000; i ++) {
     
-            MKSql *sql = [[MKSql alloc]init].equGreat(@"age",@"10").equLess(@"age",@"80");
+            MKRangeSql *sql = [[MKRangeSql alloc]init].equGreat(@"age",@"10").equLess(@"age",@"80");
             [_dataWrapper queryObjectWithCondition:sql objName:@"MKEmployee" callBackBlock:^(id objc) {
                 
             }];

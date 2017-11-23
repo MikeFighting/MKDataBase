@@ -72,6 +72,7 @@ void UncaughtExceptionHandler(NSException *exception) {
         for (Class Table in self.tableClasses) {
             
             NSString *tableName = NSStringFromClass(Table);
+            self.dbConnector.dbPath = self.dbPath;
             NSArray *models = [_dbConnector queryObjectsWithName:tableName];
             [self.tables setObject:models forKey:tableName];
             NSArray *properties = [MKRunTimeTool getPropertiesWithClassName:tableName];
@@ -166,7 +167,7 @@ void UncaughtExceptionHandler(NSException *exception) {
     NSAssert(NSClassFromString(table), @"The table name you set is wrong!");
     dispatch_barrier_async(_globalQueue, ^{
         
-        NSPredicate *primaryPredicate = [NSPredicate predicateWithFormat:@"mkid = %ld",ID];
+        NSPredicate *primaryPredicate = [NSPredicate predicateWithFormat:@"%@ = %ld",MKDBCacherPrimaryKey,ID];
         NSArray *tableObjs = [self.tables objectForKey:table];
         NSArray *filteredObjs = [tableObjs filteredArrayUsingPredicate:primaryPredicate];
         if (filteredObjs == 0) {
@@ -185,10 +186,19 @@ void UncaughtExceptionHandler(NSException *exception) {
     });
 }
 
-- (void)updateObject:(id)object withDic:(NSDictionary *)newDic {
+- (void)updateWithNewObject:(id)object {
+
+    NSString *tableName = NSStringFromClass([object class]);
+    NSInteger primaryKey = [[object valueForKey:MKDBCacherPrimaryKey] integerValue];
+    NSMutableDictionary *newValueDic = [NSMutableDictionary dictionary];
+    NSArray *properties = [self.mfTableColumns objectForKey:tableName];
+    for (int i = 0 ; i < properties.count;  i ++) {
+        
+        NSString *key = properties[i];
+        [newValueDic setObject:[object valueForKey:key] forKey:key];
+    }
     
-    
-    
+    [self update:tableName WithId:primaryKey newDic:newValueDic];
 }
 
 - (void)p_updateDataBase {
@@ -205,11 +215,10 @@ void UncaughtExceptionHandler(NSException *exception) {
             
             if ([key isEqualToString:MKUPDATE_KEY]) {
                 NSLog(@"更新了一条数据");
-                MKRangeSql *condition = [MKRangeSql make].equ(@"mkid",[obj valueForKey:@"mkid"]);
+                MKRangeSql *condition = [MKRangeSql make].equ(MKDBCacherPrimaryKey,[obj valueForKey:@"mkid"]);
                 [_dbConnector updateTableWithNewObjc:obj condition:condition];
                 
             }else if ([key isEqualToString:MKINSERT_KEY]) {
-                
                 NSLog(@"准备添加一条数据");
                 [_dbConnector insertWithObject:obj];
                 NSLog(@"添加了一条数据");
@@ -248,7 +257,6 @@ void UncaughtExceptionHandler(NSException *exception) {
 - (void)p_initResources {
     
     [self tables];
-    [self dbConnector];
     [self globalQueue];
     [self queue];
     [self updateDatas];
@@ -276,6 +284,7 @@ void UncaughtExceptionHandler(NSException *exception) {
 
     if (!_dbConnector) {
         _dbConnector = [MKDBConnector sharedInstance];
+        [_dbConnector launchDataBaseWithPath:self.dbPath];
     }
     return _dbConnector;
 }
@@ -310,5 +319,14 @@ void UncaughtExceptionHandler(NSException *exception) {
         _mfTableColumns = [NSMutableDictionary dictionary];
     }
     return _mfTableColumns;
+}
+
+- (NSString *)dbPath {
+
+    if (!_dbPath) {
+        NSString *doucmentpath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        _dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDataBase.db"];
+    }
+    return _dbPath;
 }
 @end

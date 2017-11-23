@@ -24,14 +24,14 @@
 @end
 
 @implementation MKDBConnector
-static MKDBConnector *manager = nil;
+
 
 - (instancetype)init
 {
     self = [super init];
     if (self)
     {
-        _database = [FMDatabase databaseWithPath:[self p_databasePath]];
+        
         _query = [[MKQuerySql alloc]init];
         _mkqueue = dispatch_queue_create("com.mike.mkdatabase.queue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc]init];
@@ -39,14 +39,6 @@ static MKDBConnector *manager = nil;
     }
     return self;
 }
-
-- (NSString *)p_databasePath
-{
-    NSString *doucmentpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    NSLog(@"db path : %@",doucmentpath);
-    return [doucmentpath stringByAppendingPathComponent:@"MKDBConnector.db"];
-}
-
 /**
  This method will be executed finally.
 
@@ -91,10 +83,16 @@ static MKDBConnector *manager = nil;
 + (MKDBConnector *)sharedInstance
 {
     static dispatch_once_t onceToken;
+    static MKDBConnector *connector = nil;
     dispatch_once(&onceToken, ^{
-        manager = [[self alloc] init];
+        connector = [[self alloc] init];
     });
-    return manager;
+    return connector;
+}
+
+- (void)launchDataBaseWithPath:(NSString *)dbPath {
+
+    _database = [FMDatabase databaseWithPath:dbPath];
 }
 
 /**

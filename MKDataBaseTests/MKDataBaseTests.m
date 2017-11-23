@@ -7,10 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "MKSql.h"
+#import "MKRangeSql.h"
 @interface MKDataBaseTests : XCTestCase
 
-@property (nonatomic, strong) MKSql *sql;
+@property (nonatomic, strong) MKRangeSql *sql;
 
 @end
 
@@ -24,8 +24,7 @@
 
 - (void)testSql{
 
-    _sql = [[MKSql alloc]init];
-    
+    _sql = [[MKRangeSql alloc]init];
     NSLog(@"-----%@",_sql.equ(@"12",@"12").result);
     
 }

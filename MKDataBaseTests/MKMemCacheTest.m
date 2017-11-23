@@ -23,7 +23,7 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     NSString *doucmentpath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     NSLog(@"db path : %@",doucmentpath);
-    NSString *dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDBWrapper.db"];
+    NSString *dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDBConnector.db"];
     _memCache = [[MKMemCache alloc]init];
     _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
     _memCache.dbPath = dbPath;
@@ -95,11 +95,7 @@
     insertEmployee.degree = 12;
     [_memCache insertObject:insertEmployee handler:^(BOOL result) {
         
-        XCTAssert(result,@"MemCache insert Failure");
-        
     }];
-    
-    
 }
 
 - (void)tearDown {

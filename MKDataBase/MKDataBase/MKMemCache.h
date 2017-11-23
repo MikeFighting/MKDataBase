@@ -13,6 +13,10 @@ typedef void(^MKOperationResultBlock)(BOOL result);
 
 @property(nonatomic, strong, readonly) NSMutableDictionary *tables;
 @property(nonatomic, strong) NSArray *tableClasses;
+
+/**
+ The data base's path, default: NSDocumentDirectory
+ */
 @property(nonatomic, copy) NSString *dbPath;
 
 + (instancetype)sharedInstance;

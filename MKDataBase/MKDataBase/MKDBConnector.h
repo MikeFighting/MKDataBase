@@ -10,6 +10,7 @@
 #import "MKQuerySql.h"
 #import "MKRangeSql.h"
 
+NS_ASSUME_NONNULL_BEGIN
 /**
  This adaptor is used for connet with data base tool such as FMDB, Realm etc.
  */
@@ -18,12 +19,18 @@
 - (instancetype)init __attribute ((unavailable("init is not available call sharedDatabaseManager instead")));
 
 @property (nonatomic, strong, readonly) MKQuerySql *query;
+@property (nonnull, copy) NSString *dbPath;
 
 + (MKDBConnector *)sharedInstance;
 
-// if the table is exists
-- (BOOL)isTableExistsWithName:(NSString *)tableName;
+/**
+ You MUST launch the data base before you use it.
 
+ @param dbPath The database's path
+ */
+- (void)launchDataBaseWithPath:(NSString *)dbPath;
+// if the table is exists
+- (BOOL)isTableExistsWithName:(NSString *)tableName ;
 - (BOOL)isCreateTableSuccessWithObject:(id)object;
 
 @end
@@ -67,3 +74,4 @@
 
 @end
 
+NS_ASSUME_NONNULL_END

@@ -29,16 +29,7 @@
     _dbConnector = [MKDBConnector sharedInstance];
     _memCache = [MKMemCache sharedInstance];
     _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
-    
-    NSString *doucmentpath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSLog(@"db path : %@",doucmentpath);
-    NSString *dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDBConnector.db"];
-    _memCache.dbPath = dbPath;
-    
-    
     BOOL warmUpSuccess = [_memCache warmUpMemeCache];
-    
-    NSLog(@"warm up result: %d",warmUpSuccess);
     //[self testInsertObject];
     //[self testDeletedObject];
 //    [self testUpdateObject];
@@ -90,7 +81,6 @@
     insertEmployee.experience = 2.4;
     insertEmployee.degree = 12;
     [_memCache deletObject:insertEmployee];
-    
 }
 
 - (void)testInsertObject {
