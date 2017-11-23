@@ -1,17 +1,17 @@
 //
-//  MKDBWrapper.m
+//  MKDBConnector.m
 //  Pods
 //
 //  Created by Mike on 7/6/16.
 //
 //
 
-#import "MKDBWrapper.h"
+#import "MKDBConnector.h"
 #import "FMDatabase.h"
-#import "MKSQLQuery.h"
+#import "MKQuerySql.h"
 #import <objc/runtime.h>
 
-@interface MKDBWrapper () {
+@interface MKDBConnector () {
     
     FMDatabase *_database;
     dispatch_queue_t _mkqueue;
@@ -19,12 +19,12 @@
     NSArray *_ignoreProperties;
 }
 
-@property (nonatomic, strong, readwrite) MKSQLQuery *query;
+@property (nonatomic, strong, readwrite) MKQuerySql *query;
 
 @end
 
-@implementation MKDBWrapper
-static MKDBWrapper *manager = nil;
+@implementation MKDBConnector
+static MKDBConnector *manager = nil;
 
 - (instancetype)init
 {
@@ -32,7 +32,7 @@ static MKDBWrapper *manager = nil;
     if (self)
     {
         _database = [FMDatabase databaseWithPath:[self p_databasePath]];
-        _query = [[MKSQLQuery alloc]init];
+        _query = [[MKQuerySql alloc]init];
         _mkqueue = dispatch_queue_create("com.mike.mkdatabase.queue", DISPATCH_QUEUE_CONCURRENT);
         _lock = [[NSLock alloc]init];
         _ignoreProperties = @[@"hash",@"description",@"superclass",@"debugDescription"];
@@ -44,7 +44,7 @@ static MKDBWrapper *manager = nil;
 {
     NSString *doucmentpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     NSLog(@"db path : %@",doucmentpath);
-    return [doucmentpath stringByAppendingPathComponent:@"MKDBWrapper.db"];
+    return [doucmentpath stringByAppendingPathComponent:@"MKDBConnector.db"];
 }
 
 /**
@@ -88,7 +88,7 @@ static MKDBWrapper *manager = nil;
 /**
   create the database manager
  */
-+ (MKDBWrapper *)sharedInstance
++ (MKDBConnector *)sharedInstance
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -195,7 +195,7 @@ static MKDBWrapper *manager = nil;
 
 @end
 
-@implementation MKDBWrapper (Add)
+@implementation MKDBConnector (Add)
 
 /**
  insert the data
@@ -245,12 +245,12 @@ static MKDBWrapper *manager = nil;
 
 @end
 
-@implementation MKDBWrapper (Query)
+@implementation MKDBConnector (Query)
 
 /**
  query all the objects, which satisfy the conditions
  */
-- (NSArray *)queryObjectsWithCondition:(MKSql *)condition objName:(NSString *)objcName {
+- (NSArray *)queryObjectsWithCondition:(MKRangeSql *)condition objName:(NSString *)objcName {
 
     [_lock lock];
     NSString *sqlLanguage = _query.selectM(objcName).condition(condition).sql;
@@ -263,7 +263,7 @@ static MKDBWrapper *manager = nil;
 
 }
 
-- (void)queryObjectsInBackGroundWithCondition:(MKSql *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
+- (void)queryObjectsInBackGroundWithCondition:(MKRangeSql *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
     
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
@@ -342,13 +342,13 @@ static MKDBWrapper *manager = nil;
 /**
  query the object which satisfy the conditioan
  */
-- (id)queryObjectWithCondition:(MKSql *)condition objName:(NSString *)objcName {
+- (id)queryObjectWithCondition:(MKRangeSql *)condition objName:(NSString *)objcName {
 
     NSArray *conditionResultArray =  [self queryObjectsWithCondition:condition objName:objcName];
     return [conditionResultArray firstObject];
 }
 
-- (void)queryObjectWithCondition:(MKSql *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
+- (void)queryObjectWithCondition:(MKRangeSql *)condition objName:(NSString *)objcName callBackBlock:(void(^)(id objc))callBackBlock{
     
     if (!callBackBlock) return;
     __weak typeof(self) weakSelf = self;
@@ -365,9 +365,9 @@ static MKDBWrapper *manager = nil;
 @end
 
 #pragma mark - update database
-@implementation MKDBWrapper (Update)
+@implementation MKDBConnector (Update)
 
-- (BOOL)updateTable:(NSString *)tableName newKeyValue:(NSDictionary *)newValuesDic condition:(MKSql *)condition {
+- (BOOL)updateTable:(NSString *)tableName newKeyValue:(NSDictionary *)newValuesDic condition:(MKRangeSql *)condition {
 
     /**
      * Example: UPDATE Person SET Address = 'Zhongshan 23', City = 'Nanjing' WHERE LastName = 'Wilson'
@@ -382,7 +382,7 @@ static MKDBWrapper *manager = nil;
 /**
  * update the database by object
  */
-- (BOOL)updateTableWithNewObjc:(id)tableObject condition:(MKSql *)condition{
+- (BOOL)updateTableWithNewObjc:(id)tableObject condition:(MKRangeSql *)condition{
 
     NSString *sqlLanguage = _query.updateObj(tableObject).condition(condition).sql;
     // assemble the sql language
@@ -393,13 +393,21 @@ static MKDBWrapper *manager = nil;
 
 @end
 
-@implementation MKDBWrapper (Delete)
+@implementation MKDBConnector (Delete)
 
-- (BOOL)deleteTable:(NSString *)tableName condition:(MKSql *)condition {
+- (BOOL)deleteTable:(NSString *)tableName condition:(MKRangeSql *)condition {
     
     NSString *sqlLanguage = _query.deletes(tableName).condition(condition).sql;
     BOOL isDeleteSuccess =  [self p_executeUpdateSQL:sqlLanguage];
     return isDeleteSuccess;
+}
+
+- (BOOL)deleteOjbect:(id)object {
+
+    NSString *sqlLanguage = _query.deleteObj(object).sql;
+    BOOL isDeleteSuccess =  [self p_executeUpdateSQL:sqlLanguage];
+    return isDeleteSuccess;
+    
 }
 
 @end

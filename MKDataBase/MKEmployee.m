@@ -17,8 +17,7 @@
 
 - (NSString *)description{
 
-    return [NSString stringWithFormat:@"%@:%@",[self class],
-        
+    return [NSString stringWithFormat:@"%@:%@", [self class],
                                                  @{@"name":_name,
                                                   @"age":@(_age),
                                                   @"experience":@(_experience),

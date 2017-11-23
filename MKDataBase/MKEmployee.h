@@ -8,14 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "MKDBModelProtocol.h"
 @interface MKEmployee : NSObject
 
+@property (nonatomic, assign) NSInteger mkid;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *position;
 @property (nonatomic, assign) NSInteger age;
 @property (nonatomic, assign) CGFloat experience;
 @property (nonatomic, assign) NSInteger degree;
-
 
 @end

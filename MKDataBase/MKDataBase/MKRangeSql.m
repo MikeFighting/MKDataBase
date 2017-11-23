@@ -1,24 +1,24 @@
 //
-//  MKSql.m
+//  MKRangeSql.m
 //  MKDataBase
 //
 //  Created by MIke on 31/10/2017.
 //  Copyright © 2017 Mike. All rights reserved.
 //
 
-#import "MKSql.h"
-@interface MKSql ()
+#import "MKRangeSql.h"
+@interface MKRangeSql ()
 
 @property (nonatomic, copy) NSMutableString *mutableSql;
 
 @end
 
-@implementation MKSql
+@implementation MKRangeSql
 
 #pragma mark - setter
 + (instancetype)make {
     
-    return [[MKSql alloc]init];
+    return [[MKRangeSql alloc]init];
 }
 - (instancetype)init {
 
@@ -128,7 +128,10 @@
 
 - (void)p_appendANDifNeed {
 
-    if ([_mutableSql rangeOfString:@"AND"].length > 0) {
+     NSCharacterSet *compareSet = [NSCharacterSet characterSetWithCharactersInString:@">=<"];
+     NSRange compareRange = [_mutableSql rangeOfCharacterFromSet:compareSet options:NSCaseInsensitiveSearch range:NSMakeRange(0, _mutableSql.length)];
+    
+    if (compareRange.length > 0) {
         
         [_mutableSql appendString:@" AND "];
     }

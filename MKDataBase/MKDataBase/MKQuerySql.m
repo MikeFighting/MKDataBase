@@ -6,17 +6,20 @@
 //  Copyright © 2016 vera. All rights reserved.
 //
 
-#import "MKSQLQuery.h"
+#import "MKQuerySql.h"
 #import <objc/runtime.h>
+#import "MKRunTimeTool.h"
 
-@interface MKSQLQuery()
+NSString * const MKDBCacherPrimaryKey = @"mkid";
+
+@interface MKQuerySql()
 
 @property (nonatomic, copy, readwrite) NSString *sql;
 @property (nonatomic, strong) NSDictionary *dataBaseConvertDic;
 
 @end
 
-@implementation MKSQLQuery
+@implementation MKQuerySql
 
 - (Select)select {
 
@@ -70,8 +73,6 @@
         return self.replaceInsertDic(tableName,dataModelDic);;
     };
 
-    
-   
 }
 
 - (ReplaceInsertDic)replaceInsertDic {
@@ -94,7 +95,7 @@
 - (InsertObj)insertObjc {
 
     return ^(id dataModel){
-         
+        
         NSString *tableName = [self p_classNameFromObject:dataModel];
         NSDictionary *dataModelDic = [self p_propertyDicWithObjc:dataModel];
         return self.insertDic(tableName,dataModelDic);
@@ -102,7 +103,6 @@
     };
 
 }
-
 
 - (InsertDic)insertDic {
 
@@ -136,8 +136,7 @@
 - (Condition)condition {
 
     NSAssert(_sql.length, @"the condition can not exist alone");
-    return ^(MKSql *condition){
-    
+    return ^(MKRangeSql *condition){
     
         NSString *selectType = [_sql rangeOfString:@"WHERE"].length ? @" " : @"WHERE";
         _sql = [NSString stringWithFormat:@" %@ %@ %@",_sql ,selectType, condition.result];
@@ -147,12 +146,12 @@
 
 }
 
-- (Creat)creat{
+- (Creat)creat {
 
     return ^(id dataModel){
     
-        NSAssert(dataModel, @"MKSQLQuery: the data model cannot be nil");
-        NSMutableString *sqlLanguage = [NSMutableString stringWithFormat:@"create table if not exists %@ (id integer primary key autoincrement",[self p_classNameFromObject:dataModel]];
+        NSAssert(dataModel, @"MKQuerySql: the data model cannot be nil");
+        NSMutableString *sqlLanguage = [NSMutableString stringWithFormat:@"create table if not exists %@ (mkid integer primary key autoincrement",[self p_classNameFromObject:dataModel]];
         
         // get all the properties
         NSArray *propertyNameTypeDictioanryArray = [self p_classAttributesFromClassName:[self p_classNameFromObject:dataModel]];
@@ -257,6 +256,26 @@
 
 }
 
+- (DeleteObj)deleteObj {
+
+    return ^(id tableObj) {
+    
+        NSString *tableName = [self p_classNameFromObject:tableObj];
+        NSDictionary *dataModelDic = [self p_propertyDicWithObjc:tableObj];
+        MKRangeSql *sqlCondition = [MKRangeSql make];
+        
+        NSArray *allKeys = dataModelDic.allKeys;
+        for (int i = 0 ; i < allKeys.count; i ++) {
+            
+            NSString *key = [allKeys objectAtIndex:i];
+            id object = [dataModelDic objectForKey:key];
+            sqlCondition.equ(key, object);
+        }
+        self.deletes(tableName).condition(sqlCondition);
+        return self;
+    };
+}
+
 - (void)resetSql {
 
   _sql = @"";
@@ -294,20 +313,22 @@
         const char *propertyName = property_getName(property);
         
         NSString *propertyNameString = [NSString stringWithUTF8String:propertyName];
+        
+        if ([propertyNameString isEqualToString:MKDBCacherPrimaryKey]) {
+            continue;
+        }
         // get the attributes of the property
         const char *type = property_getAttributes(property);
         
         NSString *propertOriginTypeString = [NSString stringWithCString:type encoding:NSUTF8StringEncoding];
         
         NSArray *propertyAttributesArray = [propertOriginTypeString componentsSeparatedByString:@","];
-        
         NSString *propertyOriginTypeName = [propertyAttributesArray firstObject];
         NSString *propertyResultTypeName = self.dataBaseConvertDic[propertyOriginTypeName];
         
         if (propertyResultTypeName.length) {
             
             [propertyDictioanry setObject:propertyResultTypeName forKey:propertyNameString];
-            
             // add all the properties and the names to the attributes' array
             [attributes addObject:propertyDictioanry];
             
@@ -337,7 +358,7 @@
 
 - (NSDictionary *)p_propertyDicWithObjc:(id)dataModel{
     
-    NSAssert(dataModel, @"MKSQLQuery:the data model cannot be nil");
+    NSAssert(dataModel, @"MKQuerySql:the data model cannot be nil");
     NSMutableDictionary *dataModelMDic = [NSMutableDictionary dictionary];
     NSArray *propertyArray = [self p_propertyArrayWithClassName:[self p_classNameFromObject:dataModel]];
     for ( NSString *propery in propertyArray) {
@@ -355,34 +376,12 @@
 /**
  get all the attribute fo the class by the class's name, the content of the array the dictioanry, key is the property's name, value is the property's type
  */
-
 - (NSArray *)p_propertyArrayWithClassName:(NSString *)className {
-    
-    
-    // the attribute's number
-    unsigned int outCount;
-    
-    // get all the attributes
-    objc_property_t *properties = class_copyPropertyList([self p_classFromClassName:className], &outCount);
-    // save all the names of the attributes
-    NSMutableArray *attributes = [NSMutableArray array];
-    
-    // iterate all the attribute
-    for (int i = 0; i < outCount; i++)
-    {
-        objc_property_t property = properties[i];
-        // get the name of the attributes
-        const char *propertyName = property_getName(property);
-        NSString *propertyNameString = [NSString stringWithUTF8String:propertyName];
-        // add all the properties and the names to the attributes' array
-        [attributes addObject:propertyNameString];
-        
-    }
-    free(properties);
-    
-    
-    return [NSArray arrayWithArray:attributes];
-    
+
+    NSArray *rawArray = [MKRunTimeTool getPropertiesWithClassName:className];
+    NSMutableArray *mutableArray = [NSMutableArray arrayWithArray:rawArray];
+    [mutableArray removeObject:MKDBCacherPrimaryKey];
+    return mutableArray;
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  MKSql.h
+//  MKRangeSql.h
 //  MKDataBase
 //
 //  Created by MIke on 31/10/2017.
@@ -8,16 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@class MKSql;
+@class MKRangeSql;
 
-typedef MKSql *(^Equ)(NSString *colume,id value);
-typedef MKSql *(^Less)(NSString *colume,id value);
-typedef MKSql *(^EquLess)(NSString *colume,id value);
-typedef MKSql *(^Great)(NSString *colume,id value);
-typedef MKSql *(^EquGreat)(NSString *colume, id value);
-typedef MKSql *(^NotEqu)(NSString *colume, id value);
+typedef MKRangeSql *(^Equ)(NSString *colume,id value);
+typedef MKRangeSql *(^Less)(NSString *colume,id value);
+typedef MKRangeSql *(^EquLess)(NSString *colume,id value);
+typedef MKRangeSql *(^Great)(NSString *colume,id value);
+typedef MKRangeSql *(^EquGreat)(NSString *colume, id value);
+typedef MKRangeSql *(^NotEqu)(NSString *colume, id value);
 
-@interface MKSql : NSObject
+@interface MKRangeSql : NSObject
 
 + (instancetype)make;
 /**

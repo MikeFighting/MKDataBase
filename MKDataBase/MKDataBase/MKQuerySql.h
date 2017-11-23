@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MKSql.h"
+#import "MKRangeSql.h"
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, MKRangeType){
@@ -22,24 +22,28 @@ typedef NS_ENUM(NSInteger, MKRangeType){
 NS_ASSUME_NONNULL_END
 
 
-@class MKSQLQuery;
+@class MKQuerySql;
 
-typedef MKSQLQuery *_Nonnull(^Select)(NSArray <NSString *> * _Nonnull colums);
-typedef MKSQLQuery *_Nonnull(^SelectM)(NSString * _Nullable tableName);
-typedef MKSQLQuery *_Nonnull(^From)(NSString * _Nonnull tableName);
-typedef MKSQLQuery *_Nonnull(^InsertDic)(NSString * _Nullable _Nonnulltable, NSDictionary * _Nonnull keyValueDic);
-typedef MKSQLQuery *_Nonnull(^InsertObj)(id _Nonnull dataModel);
-typedef MKSQLQuery *_Nonnull(^ReplaceInsertDic)(NSString * _Nullable table, NSDictionary * _Nonnull keyValueDic);
-typedef MKSQLQuery *_Nonnull(^RplaceInserObj)(id _Nonnull dataModel);
-typedef MKSQLQuery *_Nonnull(^Exist)(NSString * _Nonnull table);
-typedef MKSQLQuery *_Nonnull(^Condition)(MKSql * _Nonnull sqlCondition);
-typedef MKSQLQuery *_Nullable(^Creat) (id _Nonnull dataBaseModel);
-typedef MKSQLQuery *_Nonnull(^Update) (NSString * _Nonnull tableName,NSDictionary * _Nonnull newKeyValue);
-typedef MKSQLQuery *_Nonnull(^UpdateObj)(id _Nonnull tableObjc);
-typedef MKSQLQuery *_Nonnull(^Delete)(NSString * _Nonnull tableName);
+typedef MKQuerySql *_Nonnull(^Select)(NSArray <NSString *> * _Nonnull colums);
+typedef MKQuerySql *_Nonnull(^SelectM)(NSString * _Nullable tableName);
+typedef MKQuerySql *_Nonnull(^From)(NSString * _Nonnull tableName);
+typedef MKQuerySql *_Nonnull(^InsertDic)(NSString * _Nullable _Nonnulltable, NSDictionary * _Nonnull keyValueDic);
+typedef MKQuerySql *_Nonnull(^InsertObj)(id _Nonnull dataModel);
+typedef MKQuerySql *_Nonnull(^ReplaceInsertDic)(NSString * _Nullable table, NSDictionary * _Nonnull keyValueDic);
+typedef MKQuerySql *_Nonnull(^RplaceInserObj)(id _Nonnull dataModel);
+typedef MKQuerySql *_Nonnull(^Exist)(NSString * _Nonnull table);
+typedef MKQuerySql *_Nonnull(^Condition)(MKRangeSql * _Nonnull sqlCondition);
+typedef MKQuerySql *_Nonnull(^Creat) (id _Nonnull dataBaseModel);
+typedef MKQuerySql *_Nonnull(^Update) (NSString * _Nonnull tableName,NSDictionary * _Nonnull newKeyValue);
+typedef MKQuerySql *_Nonnull(^UpdateObj)(id _Nonnull tableObjc);
+typedef MKQuerySql *_Nonnull(^Delete)(NSString * _Nonnull tableName);
+typedef MKQuerySql *_Nonnull(^DeleteObj)(id _Nonnull dataModel);
 
 NS_ASSUME_NONNULL_BEGIN
-@interface MKSQLQuery : NSObject
+
+FOUNDATION_EXPORT NSString *const MKDBCacherPrimaryKey;
+
+@interface MKQuerySql : NSObject
 
 @property (nonatomic, copy) NSArray *array;
 
@@ -126,6 +130,12 @@ NS_ASSUME_NONNULL_BEGIN
  NSString *tableName
  */
 @property (nonatomic, copy) Delete deletes;
+
+/**
+ Delte data model
+ id dataModel
+ */
+@property (nonatomic, copy) DeleteObj deleteObj;
 
 /**
  Reset the sql language to empty.

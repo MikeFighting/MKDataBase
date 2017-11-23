@@ -7,8 +7,9 @@
 //
 
 #import "MKMemCache.h"
-#import "MKDBWrapper.h"
-
+#import "MKDBConnector.h"
+#import "MKRunTimeTool.h"
+#import <UIKit/UIKit.h>
 @interface MKMemCache()
 {
     dispatch_queue_t _queue;
@@ -16,7 +17,9 @@
 
 @property(nonatomic, strong, readwrite) NSMutableDictionary *tables;
 @property(nonatomic, strong) NSMutableArray *updateDatas;
-@property(nonatomic, strong) MKDBWrapper *dbWrapper;
+@property(nonatomic, strong) NSMutableDictionary *primaryKeys; // key:TableName value:PrimaryKey
+@property(nonatomic, strong) NSMutableDictionary *tableColumns; // key:TableName value:ColumnNames
+@property(nonatomic, strong) MKDBConnector *dbConnector;
 @property(nonatomic, assign) dispatch_queue_t globalQueue;
 
 @end
@@ -70,18 +73,19 @@ void UncaughtExceptionHandler(NSException *exception) {
         for (Class Table in self.tableClasses) {
             
             NSString *tableName = NSStringFromClass(Table);
-            NSArray *models = [_dbWrapper queryObjectsWithName:tableName];
+            NSArray *models = [_dbConnector queryObjectsWithName:tableName];
             [self.tables setObject:models forKey:tableName];
+            NSArray *properties = [MKRunTimeTool getPropertiesWithClassName:tableName];
+            [self.tableColumns setObject:properties forKey:tableName];
+            
         }
         
         return YES;
         
     } @catch (NSException *exception) {
-        NSLog(@"MKDBWrapper: %@--%@",exception.name, exception.reason);
+        NSLog(@"MKDBConnector: %@--%@",exception.name, exception.reason);
         return NO;
     }
-    
-   
 }
 
 - (NSArray *)queryTable:(NSString *)table withRegx:(NSString *)regex {
@@ -115,23 +119,31 @@ void UncaughtExceptionHandler(NSException *exception) {
     return resultArray;
 }
 
-- (void)insertObject:(id<MKDBModelProtocol>)object {
+- (void)insertObject:(id)object primaryKey:(NSString *)property {
     
-    NSString *tableName = NSStringFromClass(object.class);
+    NSString *tableName = NSStringFromClass([object class]);
     NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
+    NSArray *tableColumns = [self.tableColumns objectForKey:tableName];
+
+    if (![tableColumns containsObject:property]) {
+        
+        [NSException raise:NSInvalidArgumentException format:@"The primary key you set is illegel"];
+    }
+    
     dispatch_barrier_async(_globalQueue, ^{
         
         [_updateDatas addObject:@{MKINSERT_KEY:object}];
         NSMutableArray *originArray = [NSMutableArray arrayWithArray:[_tables objectForKey:tableName]];
         [originArray addObject:object];
         [_tables setObject:originArray forKey:tableName];
+        [_primaryKeys setObject:property forKey:tableName];
         
     });
 }
 
-- (void)insertObject:(id<MKDBModelProtocol>)object handler:(MKOperationResultBlock)resultBlock {
+- (void)insertObject:(id)object primaryKey:(NSString *)property handler:(MKOperationResultBlock)resultBlock {
 
-    NSString *tableName = NSStringFromClass(object.class);
+    NSString *tableName = NSStringFromClass([object class]);
     NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
     dispatch_barrier_async(_globalQueue, ^{
         
@@ -139,15 +151,21 @@ void UncaughtExceptionHandler(NSException *exception) {
         NSMutableArray *originArray = [NSMutableArray arrayWithArray:[_tables objectForKey:tableName]];
         [originArray addObject:object];
         [_tables setObject:originArray forKey:tableName];
+        [_primaryKeys setObject:property forKey:tableName];
         resultBlock(YES);
     });
 }
 
 - (void)deletObject:(id)object {
     
+    NSString *tableName = NSStringFromClass([object class]);
+    NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
     dispatch_barrier_async(_globalQueue, ^{
         
         [_updateDatas addObject:@{MKDELETE_KEY:object}];
+        NSMutableArray *originArray = [NSMutableArray arrayWithArray:[_tables objectForKey:tableName]];
+        [originArray removeObject:object];
+        [_tables setObject:originArray forKey:tableName];
         
     });
 }
@@ -165,7 +183,6 @@ void UncaughtExceptionHandler(NSException *exception) {
 
 - (void)p_updateDataBase {
 
-    
     if (_updateDatas.count == 0) {
         return;
     }
@@ -179,15 +196,18 @@ void UncaughtExceptionHandler(NSException *exception) {
             if ([key isEqualToString:MKUPDATE_KEY]) {
                 NSLog(@"更新了一条数据");
                 
-                [_dbWrapper updateTableWithNewObjc:obj condition:nil];
+                [_dbConnector updateTableWithNewObjc:obj condition:nil];
                 
             }else if ([key isEqualToString:MKINSERT_KEY]) {
                 
                 NSLog(@"准备添加一条数据");
-                [_dbWrapper insertWithObject:obj];
+                [_dbConnector insertWithObject:obj];
                 NSLog(@"添加了一条数据");
+                
             }else if ([key isEqualToString:MKDELETE_KEY]) {
-                NSLog(@"更新了一条数据");
+                
+                [_dbConnector deleteOjbect:obj];
+                NSLog(@"删除了一条数据");
             }
             
         }];
@@ -218,10 +238,11 @@ void UncaughtExceptionHandler(NSException *exception) {
 - (void)p_initResources {
     
     [self tables];
-    [self dbWrapper];
+    [self dbConnector];
     [self globalQueue];
     [self queue];
     [self updateDatas];
+    [self tableColumns];
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
     /*
      *Update the database if the App enter background or we received memory warning.
@@ -241,12 +262,12 @@ void UncaughtExceptionHandler(NSException *exception) {
     return _tables;
 }
 
-- (MKDBWrapper *)dbWrapper {
+- (MKDBConnector *)dbConnector {
 
-    if (!_dbWrapper) {
-        _dbWrapper = [MKDBWrapper sharedInstance];
+    if (!_dbConnector) {
+        _dbConnector = [MKDBConnector sharedInstance];
     }
-    return _dbWrapper;
+    return _dbConnector;
 }
 
 - (dispatch_queue_t)globalQueue {
@@ -273,4 +294,19 @@ void UncaughtExceptionHandler(NSException *exception) {
     return _updateDatas;
 }
 
+- (NSMutableDictionary *)primaryKeys {
+
+    if (!_primaryKeys) {
+        _primaryKeys = [NSMutableDictionary dictionary];
+    }
+    return _primaryKeys;
+}
+
+- (NSMutableDictionary *)tableColumns {
+
+    if (!_tableColumns) {
+        _tableColumns = [NSMutableDictionary dictionary];
+    }
+    return _tableColumns;
+}
 @end
