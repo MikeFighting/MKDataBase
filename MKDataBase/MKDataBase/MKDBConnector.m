@@ -19,6 +19,7 @@
     NSArray *_ignoreProperties;
 }
 
+@property (nonatomic, copy) NSString *dbPath;
 @property (nonatomic, strong, readwrite) MKQuerySql *query;
 
 @end
@@ -50,12 +51,14 @@
 - (BOOL)p_executeUpdateSQL:(NSString *)sql{
     
     [_lock lock];
+    NSLog(@"lock %s",__func__);
     if (![_database open]) return NO;
     NSAssert(sql.length > 1, @"the sql language can not be empty");
     BOOL isExecuteSuccess = [_database executeUpdate:sql];
     [_query resetSql];
     [_database close];
     [_lock unlock];
+    NSLog(@"unlock %s",__func__);
     return isExecuteSuccess;
 }
 
@@ -74,7 +77,6 @@
     [_query resetSql];
     
     return resultSet;
-    
 }
 
 /**
@@ -86,12 +88,18 @@
     static MKDBConnector *connector = nil;
     dispatch_once(&onceToken, ^{
         connector = [[self alloc] init];
+        [connector launchDataBaseWithPath:@""];
     });
     return connector;
 }
 
 - (void)launchDataBaseWithPath:(NSString *)dbPath {
-
+    
+    if (dbPath.length == 0) {
+        
+        dbPath = self.dbPath;
+    }
+    NSLog(@"DB PATH: %@",dbPath);
     _database = [FMDatabase databaseWithPath:dbPath];
 }
 
@@ -100,7 +108,8 @@
  */
 - (BOOL)isTableExistsWithName:(NSString *)tableName
 {
-    [_lock lock];
+ 
+    
     NSString *sql = _query.exist(tableName).sql;
     FMResultSet *results = [self p_executeQuerySQL:sql];
     
@@ -111,8 +120,7 @@
         return YES;
     }
     [_database close];
-    [_lock unlock];
-    
+    NSLog(@"unlock %s",__func__);
     return NO;
 }
 
@@ -250,12 +258,12 @@
  */
 - (NSArray *)queryObjectsWithCondition:(MKRangeSql *)condition objName:(NSString *)objcName {
 
-    [_lock lock];
+    NSLog(@"lock %s",__func__);
     NSString *sqlLanguage = _query.selectM(objcName).condition(condition).sql;
     FMResultSet *results = [self p_executeQuerySQL:sqlLanguage];
     NSArray *reultModels = [self p_getObjcsWithResutltSet:results className:objcName];
     [_database close];
-    [_lock unlock];
+    NSLog(@"unlock %s",__func__);
     return reultModels;
     
 
@@ -271,13 +279,14 @@
         NSArray *foundObjs = [self queryObjectsWithCondition:condition objName:objcName];
         callBackBlock(foundObjs);
     });
-    
-    
 }
 
 - (NSArray *)p_getObjcsWithResutltSet:(FMResultSet *)resultSet className:(NSString *)className {
 
     NSAssert(resultSet, @"The inputed resultSet can not be Nil");
+    if (resultSet == nil) {
+        return nil;
+    }
     NSArray *attributes = [self p_propertyArrayWithClassName:className];
     // iterate all the resuts and creat object
     NSMutableArray *resultModels = [NSMutableArray array];
@@ -327,13 +336,14 @@
  */
 - (NSArray *)queryObjectsWithName:(NSString *)className
 {
-    [_lock lock];
+    
+    NSLog(@"lock %s",__func__);
     if (![_database open]) return nil;
     NSString *sql = _query.selectM(className).sql;
     FMResultSet *results = [self p_executeQuerySQL:sql];
     NSArray *reultModels =  [self p_getObjcsWithResutltSet:results className:className];
     [_database close];
-    [_lock unlock];
+    NSLog(@"unlock %s",__func__);
     return reultModels;
 }
 
@@ -357,7 +367,6 @@
         callBackBlock(objc);
         
     });
-    
 }
 
 @end
@@ -406,6 +415,15 @@
     BOOL isDeleteSuccess =  [self p_executeUpdateSQL:sqlLanguage];
     return isDeleteSuccess;
     
+}
+
+- (NSString *)dbPath {
+    
+    if (!_dbPath) {
+        NSString *doucmentpath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        _dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDataBase.db"];
+    }
+    return _dbPath;
 }
 
 @end

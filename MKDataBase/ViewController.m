@@ -29,13 +29,15 @@
     _dbConnector = [MKDBConnector sharedInstance];
     _memCache = [MKMemCache sharedInstance];
     _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
-    BOOL warmUpSuccess = [_memCache warmUpMemeCache];
-    //[self testInsertObject];
-    //[self testDeletedObject];
-//    [self testUpdateObject];
-    [self crashAfterAWhile];
-    [self testUpdateObjectWithDic];
+//    BOOL isCreatScuccess = [_dbConnector isCreateTableSuccessWithObject:[MKEmployee new]];
+//    BOOL warmUpSuccess = [_memCache warmUpMemeCache];
+ //   [self testInsertObject];
     
+//    [self testDeletedObject];
+//    [self testUpdateObject];
+//    [self crashAfterAWhile];
+//    [self testUpdateObjectWithDic];
+//    
 }
 
 - (void)crashAfterAWhile {

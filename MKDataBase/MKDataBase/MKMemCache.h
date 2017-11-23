@@ -17,10 +17,10 @@ typedef void(^MKOperationResultBlock)(BOOL result);
 /**
  The data base's path, default: NSDocumentDirectory
  */
-@property(nonatomic, copy) NSString *dbPath;
 
 + (instancetype)sharedInstance;
 - (BOOL)warmUpMemeCache;
+
 - (NSArray *)queryTable:(NSString *)table withPredicate:(NSPredicate *)prediact;
 - (NSArray *)queryTable:(NSString *)table withRegx:(NSString *)regx;
 

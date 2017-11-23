@@ -66,13 +66,11 @@ void UncaughtExceptionHandler(NSException *exception) {
 -(BOOL)warmUpMemeCache {
     
     NSAssert(self.tableClasses.count, @"Please set all the tables' name firstly");
-    NSAssert(self.dbPath.length, @"Please set the database path firstly");
     @try {
         
         for (Class Table in self.tableClasses) {
             
             NSString *tableName = NSStringFromClass(Table);
-            self.dbConnector.dbPath = self.dbPath;
             NSArray *models = [_dbConnector queryObjectsWithName:tableName];
             [self.tables setObject:models forKey:tableName];
             NSArray *properties = [MKRunTimeTool getPropertiesWithClassName:tableName];
@@ -122,7 +120,6 @@ void UncaughtExceptionHandler(NSException *exception) {
 - (void)insertObject:(id)object {
     
     NSString *tableName = NSStringFromClass([object class]);
-    NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
     
     dispatch_barrier_async(_globalQueue, ^{
         
@@ -137,7 +134,6 @@ void UncaughtExceptionHandler(NSException *exception) {
 - (void)insertObject:(id)object handler:(MKOperationResultBlock)resultBlock {
 
     NSString *tableName = NSStringFromClass([object class]);
-    NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
     dispatch_barrier_async(_globalQueue, ^{
         
         [_updateDatas addObject:@{MKINSERT_KEY:object}];
@@ -151,7 +147,6 @@ void UncaughtExceptionHandler(NSException *exception) {
 - (void)deletObject:(id)object {
     
     NSString *tableName = NSStringFromClass([object class]);
-    NSAssert([[_tables allKeys] containsObject:tableName], @"The object you inset did not exist!");
     dispatch_barrier_async(_globalQueue, ^{
         
         [_updateDatas addObject:@{MKDELETE_KEY:object}];
@@ -284,7 +279,6 @@ void UncaughtExceptionHandler(NSException *exception) {
 
     if (!_dbConnector) {
         _dbConnector = [MKDBConnector sharedInstance];
-        [_dbConnector launchDataBaseWithPath:self.dbPath];
     }
     return _dbConnector;
 }
@@ -319,14 +313,5 @@ void UncaughtExceptionHandler(NSException *exception) {
         _mfTableColumns = [NSMutableDictionary dictionary];
     }
     return _mfTableColumns;
-}
-
-- (NSString *)dbPath {
-
-    if (!_dbPath) {
-        NSString *doucmentpath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-        _dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDataBase.db"];
-    }
-    return _dbPath;
 }
 @end

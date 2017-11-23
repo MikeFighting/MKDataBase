@@ -16,6 +16,7 @@ typedef MKRangeSql *(^EquLess)(NSString *colume,id value);
 typedef MKRangeSql *(^Great)(NSString *colume,id value);
 typedef MKRangeSql *(^EquGreat)(NSString *colume, id value);
 typedef MKRangeSql *(^NotEqu)(NSString *colume, id value);
+typedef MKRangeSql *(^Include)(NSString *colume, NSArray *valueSet);
 
 @interface MKRangeSql : NSObject
 
@@ -30,6 +31,7 @@ typedef MKRangeSql *(^NotEqu)(NSString *colume, id value);
 @property (nonatomic, copy) Great great;
 @property (nonatomic, copy) EquGreat equGreat;
 @property (nonatomic, copy) NotEqu notEqu;
+@property (nonatomic, copy) Include include;
 
 @property (nonatomic, copy) NSString *result;
 

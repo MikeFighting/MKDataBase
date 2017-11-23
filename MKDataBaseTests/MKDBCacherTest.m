@@ -85,6 +85,16 @@
     
 }
 
+- (void)testUpdateSet{
+    
+    MKRangeSql *sqlCondition = [MKRangeSql make].include(@"degree",@[@12]);
+    BOOL updateSuccessWithNewKeys = [_dataWrapper updateTable:@"MKEmployee" newKeyValue:@{@"name":@"MJike",@"position":@"topCoder"} condition:sqlCondition];
+    XCTAssert(updateSuccessWithNewKeys, @"update database failure");
+    
+}
+
+
+
 - (void)testUpdateWithObject{
     
     MKEmployee *employee = [[MKEmployee alloc]init];

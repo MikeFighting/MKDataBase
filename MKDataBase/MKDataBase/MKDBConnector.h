@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init __attribute ((unavailable("init is not available call sharedDatabaseManager instead")));
 
 @property (nonatomic, strong, readonly) MKQuerySql *query;
-@property (nonnull, copy) NSString *dbPath;
 
 + (MKDBConnector *)sharedInstance;
 

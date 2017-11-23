@@ -99,6 +99,17 @@
     };
 }
 
+- (Include)include {
+
+    return ^(NSString *colume, NSArray *valueSet) {
+        
+        NSString *valuesString = [valueSet componentsJoinedByString:@","];
+        [self p_appendANDifNeed];
+        [_mutableSql appendString:[NSString stringWithFormat:@" %@ in ( %@ )",colume,valuesString]];
+        return self;
+    };
+}
+
 // The ' should be add if the colume is String Type. Otherwise, the 'no such column' will occur.
 - (void)p_addExtraInfoForObj:(id)obj TargetString:(NSString *)target {
 

@@ -37,6 +37,11 @@
                BlueprintName = "MKDataBaseTests"
                ReferencedContainer = "container:MKDataBase.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "MKDBCacherTest/testQueryObjectWithName">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">

@@ -26,7 +26,6 @@
     NSString *dbPath = [doucmentpath stringByAppendingPathComponent:@"MKDBConnector.db"];
     _memCache = [[MKMemCache alloc]init];
     _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
-    _memCache.dbPath = dbPath;
     BOOL warmUpSuccess = [_memCache warmUpMemeCache];
     XCTAssert(warmUpSuccess,@"warm up success");
 }
