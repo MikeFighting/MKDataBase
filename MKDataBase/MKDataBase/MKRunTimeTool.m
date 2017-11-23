@@ -9,8 +9,9 @@
 #import "MKRunTimeTool.h"
 #import <objc/runtime.h>
 @implementation MKRunTimeTool
-+ (NSArray *)getPropertiesWithClassName:(NSString *)className {
 
++ (NSArray *)getPropertiesWithClassName:(NSString *)className {
+    
     Class MyClass = NSClassFromString(className);
     NSAssert(MyClass, @"The class name you set is wrong");
     // store all the properties
@@ -27,4 +28,5 @@
     }
     return [NSArray arrayWithArray:resultProperties];
 }
+
 @end

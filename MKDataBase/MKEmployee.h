@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 @interface MKEmployee : NSObject
 
-@property (nonatomic, assign) NSInteger mkid;
+@property (nonatomic, assign, readonly) NSInteger mkid;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *position;
 @property (nonatomic, assign) NSInteger age;

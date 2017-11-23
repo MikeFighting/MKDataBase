@@ -26,11 +26,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
     
-    
     _dbConnector = [MKDBConnector sharedInstance];
-    MKEmployee *employee = [[MKEmployee alloc]init];
-    BOOL result = [_dbConnector isCreateTableSuccessWithObject:employee];
-             
     _memCache = [MKMemCache sharedInstance];
     _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
     
@@ -45,8 +41,10 @@
     NSLog(@"warm up result: %d",warmUpSuccess);
     //[self testInsertObject];
     //[self testDeletedObject];
-
-
+//    [self testUpdateObject];
+    [self crashAfterAWhile];
+    [self testUpdateObjectWithDic];
+    
 }
 
 - (void)crashAfterAWhile {
@@ -104,14 +102,20 @@
     insertEmployee.experience = 2.4;
     insertEmployee.degree = 12;
 
-    [_memCache insertObject:insertEmployee primaryKey:@"mkid" handler:^(BOOL result) {
-       
-        
-        
+    [_memCache insertObject:insertEmployee handler:^(BOOL result) {
+    
     }];
-    
+}
 
-    
+- (void)testUpdateObjectWithDic {
+
+    MKEmployee *insertEmployee = [[MKEmployee alloc]init];
+    insertEmployee.name = @"战狼5";
+    insertEmployee.age = 28;
+    insertEmployee.position = @"Auditing";
+    insertEmployee.experience = 2.4;
+    insertEmployee.degree = 12;
+    [_memCache update:@"MKEmployee" WithId:1 newDic:@{@"name":@"new战狼"}];
     
 }
 
