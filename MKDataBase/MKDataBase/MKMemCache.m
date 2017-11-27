@@ -203,7 +203,9 @@ void UncaughtExceptionHandler(NSException *exception) {
     }
     
     NSInteger updateNum = 0;
-    for (int i = 0 ; i < _updateDatas.count; i ++) {
+    
+    // 这里可以避免在操作_updateDatas的过程中其它线程对其进行操作，造成线程不安全
+    for (NSInteger i = 0, originUpdateCount = _updateDatas.count; i < originUpdateCount; i ++) {
         
         NSDictionary *updateDic = _updateDatas[i];
         [updateDic enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL * _Nonnull stop) {
@@ -225,10 +227,13 @@ void UncaughtExceptionHandler(NSException *exception) {
             }
             
         }];
-        
         updateNum += 1;
     }
-    [_updateDatas removeObjectsInRange:NSMakeRange(0, updateNum)];
+    
+    if (_updateDatas.count >= updateNum) {
+        
+        [_updateDatas removeObjectsInRange:NSMakeRange(0, updateNum)];
+    }
 }
 
 - (void)asynMemAndDataBase {

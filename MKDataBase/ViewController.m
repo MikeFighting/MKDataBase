@@ -26,9 +26,9 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _dbConnector = [MKDBConnector sharedInstance];
-    _memCache = [MKMemCache sharedInstance];
-    _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
+//    _dbConnector = [MKDBConnector sharedInstance];
+//    _memCache = [MKMemCache sharedInstance];
+//    _memCache.tableClasses = @[NSClassFromString(@"MKEmployee")];
 //    BOOL isCreatScuccess = [_dbConnector isCreateTableSuccessWithObject:[MKEmployee new]];
 //    BOOL warmUpSuccess = [_memCache warmUpMemeCache];
  //   [self testInsertObject];
@@ -37,7 +37,9 @@
 //    [self testUpdateObject];
 //    [self crashAfterAWhile];
 //    [self testUpdateObjectWithDic];
-//    
+//
+    [self testQueryAndAdd];
+    
 }
 
 - (void)crashAfterAWhile {
@@ -53,11 +55,11 @@
 
 - (void)testQueryAndAdd {
 
+    
     NSMutableArray *array = [[NSMutableArray alloc]init];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_barrier_async(queue, ^{
-        
-        sleep(0.01);
+  
         for (int i = 0; i < 1000; i ++) {
             
             [array addObject:@(i)];
@@ -66,9 +68,11 @@
     
     dispatch_sync(queue, ^{
         
-        for (int i = 0; i < array.count; i ++) {
+        for (int i = 0; i < 100; i ++) {
             
-            NSLog(@"number %@",array[i]);
+            NSInteger count = array.count;
+            [array removeObjectsInRange:NSMakeRange(0, count)];
+            NSLog(@"array: %@",array);
         }
         
     });

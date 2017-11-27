@@ -137,108 +137,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MKDataBase/MKDataBase/MKMemCache.m"
-            timestampString = "533116713.505478"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
-            landmarkName = "-update:WithId:newDic:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MKDataBase/MKDataBase/MKMemCache.m"
-            timestampString = "533116713.505478"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
-            landmarkName = "-update:WithId:newDic:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MKDataBase/MKDataBase/MKMemCache.m"
-            timestampString = "533116713.505478"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
-            landmarkName = "-update:WithId:newDic:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__35-[MKMemCache update:WithId:newDic:]_block_invoke_2"
-                  moduleName = "MKDataBase"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBase/MKDataBase/MKMemCache.m"
-                  timestampString = "533116810.982644"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "85">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__35-[MKMemCache update:WithId:newDic:]_block_invoke_2"
-                  moduleName = "MKDataBase"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBase/MKDataBase/MKMemCache.m"
-                  timestampString = "533116810.985039"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "248">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MKDataBase/MKDataBase/MKMemCache.m"
-            timestampString = "533116713.505478"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
-            landmarkName = "-p_updateDataBase"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKDBConnector.m"
-            timestampString = "533116485.722707"
+            timestampString = "533461954.664451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
             landmarkName = "-updateTableWithNewObjc:condition:"
             landmarkType = "7">
          </BreakpointContent>
@@ -250,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKDBConnector.m"
-            timestampString = "533116485.722707"
+            timestampString = "533461954.664451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "383"
-            endingLineNumber = "383"
+            startingLineNumber = "396"
+            endingLineNumber = "396"
             landmarkName = "-updateTable:newKeyValue:condition:"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKDBConnector.m"
-            timestampString = "533116485.722707"
+            timestampString = "533461954.664451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
+            startingLineNumber = "397"
+            endingLineNumber = "397"
             landmarkName = "-updateTable:newKeyValue:condition:"
             landmarkType = "7">
          </BreakpointContent>
@@ -298,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKDBConnector.m"
-            timestampString = "533116485.722707"
+            timestampString = "533461954.664451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
             landmarkName = "-p_getObjcsWithResutltSet:className:"
             landmarkType = "7">
          </BreakpointContent>
@@ -330,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/MKDataBase/MKDBConnector.m"
-            timestampString = "533116485.722707"
+            timestampString = "533461954.664451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "345"
-            endingLineNumber = "345"
+            startingLineNumber = "358"
+            endingLineNumber = "358"
             landmarkName = "-queryObjectsWithName:"
             landmarkType = "7">
          </BreakpointContent>
@@ -346,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MKDataBase/ViewController.m"
-            timestampString = "533115634.176902"
+            timestampString = "533461954.664451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "-testDeletedObject"
             landmarkType = "7">
          </BreakpointContent>
@@ -369,68 +273,22 @@
             endingLineNumber = "92"
             landmarkName = "-testUpdateSet"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[MKDBCacherTest testUpdateSet]"
-                  moduleName = "MKDataBaseTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBaseTests/MKDBCacherTest.m"
-                  timestampString = "533116816.583794"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "92"
-                  endingLineNumber = "92"
-                  offsetFromSymbolStart = "534">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[MKDBCacherTest testUpdateSet]"
-                  moduleName = "MKDataBaseTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBaseTests/MKDBCacherTest.m"
-                  timestampString = "533116816.586804"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "92"
-                  endingLineNumber = "92"
-                  offsetFromSymbolStart = "926">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[MKDBCacherTest testUpdateSet]"
-                  moduleName = "MKDataBaseTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBaseTests/MKDBCacherTest.m"
-                  timestampString = "533116816.589113"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "92"
-                  endingLineNumber = "92"
-                  offsetFromSymbolStart = "1019">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[MKDBCacherTest testUpdateSet]"
-                  moduleName = "MKDataBaseTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/a58/Desktop/GitHub/MKDataBase/MKDataBaseTests/MKDBCacherTest.m"
-                  timestampString = "533116816.590561"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "92"
-                  endingLineNumber = "92"
-                  offsetFromSymbolStart = "1141">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MKDataBase/ViewController.m"
+            timestampString = "533461967.621499"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "-testQueryAndAdd"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

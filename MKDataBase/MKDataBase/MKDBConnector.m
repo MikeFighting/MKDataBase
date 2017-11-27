@@ -82,8 +82,8 @@
 /**
   create the database manager
  */
-+ (MKDBConnector *)sharedInstance
-{
++ (MKDBConnector *)sharedInstance {
+    
     static dispatch_once_t onceToken;
     static MKDBConnector *connector = nil;
     dispatch_once(&onceToken, ^{
@@ -106,9 +106,7 @@
 /**
   if the talbe is exist
  */
-- (BOOL)isTableExistsWithName:(NSString *)tableName
-{
- 
+- (BOOL)isTableExistsWithName:(NSString *)tableName {
     
     NSString *sql = _query.exist(tableName).sql;
     FMResultSet *results = [self p_executeQuerySQL:sql];
@@ -127,21 +125,21 @@
 /**
   create talbe with object
  */
-- (BOOL)isCreateTableSuccessWithObject:(id)object
-{
+- (BOOL)isCreateTableSuccessWithObject:(id)object {
+    
     NSString *sql = _query.creat(object).sql;
     BOOL isCreatSuccess = [self p_executeUpdateSQL:sql];
     return isCreatSuccess;
 }
 
 // get the class's name
-- (NSString *)p_classNameFromObject:(id)object
-{
+- (NSString *)p_classNameFromObject:(id)object {
+    
     return NSStringFromClass([object class]);
 }
 
-- (Class)p_classFromClassName:(NSString *)className
-{
+- (Class)p_classFromClassName:(NSString *)className {
+    
     return NSClassFromString(className);
 }
 
@@ -206,8 +204,7 @@
 /**
  insert the data
  */
-- (BOOL)insertWithObject:(id)object
-{
+- (BOOL)insertWithObject:(id)object {
     
     // the database cannot be opened
     if (![_database open]) return NO;
@@ -228,19 +225,26 @@
     return isInsertSuccessed;
 }
 
-- (BOOL)addColumWithTableName:(NSString *)tableName columName:(NSArray *)names type:(NSArray *)types defaluts:(NSArray *)defaultValues{
+- (BOOL)addColumWithTableName:(NSString *)tableName columName:(NSArray *)names type:(NSArray *)types defaluts:(NSArray *)defaultValues {
     
-    if (![_database open]) return NO;
+    if (![_database open]) {
+        return NO;
+    }
     
     __block NSMutableString *sql = [NSMutableString stringWithFormat:@"ALTER TABLE %@ ADD ",tableName];
     [names enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         [sql appendString:[NSString stringWithFormat:@"%@ %@ ", names[idx], types[idx]]];
-        if (defaultValues.count)
+        if (defaultValues.count) {
             [sql appendString:[NSString stringWithFormat:@"DEFAULT %@",defaultValues[idx]]];
+        }
         
-        if (idx != names.count - 1) [sql appendString:@", "];
-        else[sql appendString:@""];
+        if (idx != names.count - 1) {
+             [sql appendString:@", "];
+        }
+        else {
+            [sql appendString:@""];
+        }
         
     }];
     
@@ -271,7 +275,9 @@
 
 - (void)queryObjectsInBackGroundWithCondition:(MKRangeSql *)condition objName:(NSString *)objcName callBack:(void(^)(NSArray *foundObjcts))callBackBlock{
     
-    if (!callBackBlock) return;
+    if (!callBackBlock) {
+        return;
+    }
     __weak typeof(self) weakSelf = self;
     dispatch_async(_mkqueue, ^{
     
@@ -302,7 +308,9 @@
         {
             NSString *attributeName = attributes[i];
             NSString *valueString = [resultSet stringForColumn:attributeName];
-            if (valueString.length == 0) valueString = @"";
+            if (valueString.length == 0) {
+                valueString = @"";
+            }
             // set the value
             if (![_ignoreProperties containsObject:attributeName]) {
                [obj setValue:valueString forKey:attributeName];
@@ -318,7 +326,9 @@
 
 - (void)queryObjectsInBackGroundWithName:(NSString *)className callBack:(void(^)(NSArray *))callBackBlock{
 
-    if (!callBackBlock) return;
+    if (!callBackBlock) {
+        return;
+    }
     __weak typeof(self) weakSelf = self;
     dispatch_async(_mkqueue, ^{
 
@@ -338,7 +348,9 @@
 {
     
     NSLog(@"lock %s",__func__);
-    if (![_database open]) return nil;
+    if (![_database open])  {
+        return nil;
+    }
     NSString *sql = _query.selectM(className).sql;
     FMResultSet *results = [self p_executeQuerySQL:sql];
     NSArray *reultModels =  [self p_getObjcsWithResutltSet:results className:className];

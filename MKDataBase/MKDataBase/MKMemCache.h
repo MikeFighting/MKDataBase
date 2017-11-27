@@ -30,6 +30,5 @@ typedef void(^MKOperationResultBlock)(BOOL result);
 - (void)deletObject:(id)object;
 - (void)updateWithNewObject:(id)object;
 - (void)update:(NSString *)table WithId:(NSInteger)ID newDic:(NSDictionary *)newDic;
-- (void)updateObject:(id)object withDic:(NSDictionary *)newDic;
 
 @end
